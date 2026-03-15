@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Text Adventure</title>
+    <style>
+        /* Base styling to match the dark, minimalist image */
+        body {
+            background-color: #000000;
+            color: #4b6584; /* Dim blue-grey for standard text */
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 60px;
+        }
+
+        /* Headers styled to match the dark blue from the image */
+        h1 {
+            color: #0c2461; /* Deep blue */
+            font-size: 1.2rem;
+            margin: 0 0 15px 0;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Interactive elements */
+        button {
+            background-color: #000000;
+            color: #0c2461;
+            border: 1px solid #0c2461;
+            padding: 8px 16px;
+            font-family: inherit;
+            cursor: pointer;
+            width: fit-content;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background-color: #0c2461;
+            color: #000000;
+        }
+
+        #log {
+            min-height: 60px;
+            margin-bottom: 10px;
+            color: #778ca3;
+        }
+        
+        .stat-line {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="section" id="game-section">
+        <h1>Game</h1>
+        <div id="log">The darkness surrounds you.</div>
+        <button onclick="searchArea()">Search the Dark</button>
+    </div>
+
+    <div class="section" id="player-section">
+        <h1>Player</h1>
+        <div id="player-stats">
+            <!-- Populated by JS -->
+        </div>
+    </div>
+
+    <div class="section" id="inventory-section">
+        <h1>Inventory</h1>
+        <div id="inventory-list">
+            <!-- Populated by JS -->
+        </div>
+    </div>
+
+    <script>
+        // Game State
+        const state = {
+            player: {
+                health: 100,
+                energy: 50,
+                level: 1,
+                xp: 0
+            },
+            inventory: {
+                "Shadow Shard": 0,
+                "Mystic Dust": 0
+            }
+        };
+
+        // DOM Elements
+        const logEl = document.getElementById('log');
+        const statsEl = document.getElementById('player-stats');
+        const invEl = document.getElementById('inventory-list');
+
+        // Core Functions
+        function updateUI() {
+            // Update Stats
+            statsEl.innerHTML = `
+                <div class="stat-line">Health: ${state.player.health}</div>
+                <div class="stat-line">Energy: ${state.player.energy}</div>
+                <div class="stat-line">Level: ${state.player.level} (XP: ${state.player.xp})</div>
+            `;
+
+            // Update Inventory
+            let invHTML = '';
+            let hasItems = false;
+            for (const [item, count] of Object.entries(state.inventory)) {
+                if (count > 0) {
+                    invHTML += `<div class="stat-line">${item}: ${count}</div>`;
+                    hasItems = true;
+                }
+            }
+            invEl.innerHTML = hasItems ? invHTML : '<div class="stat-line">Empty</div>';
+        }
+
+        function printLog(message) {
+            logEl.innerHTML = `> ${message}`;
+        }
+
+        // Actions
+        function searchArea() {
+            if (state.player.energy <= 0) {
+                printLog("You are too exhausted to search.");
+                return;
+            }
+
+            state.player.energy -= 1;
+            state.player.xp += 5;
+
+            // Level up check
+            if (state.player.xp >= 50 * state.player.level) {
+                state.player.level++;
+                state.player.energy = 50 + (10 * state.player.level);
+                printLog(`You leveled up to Level ${state.player.level}!`);
+                updateUI();
+                return;
+            }
+
+            // Loot table
+            const roll = Math.random();
+            if (roll < 0.3) {
+                state.inventory["Shadow Shard"]++;
+                printLog("You found a Shadow Shard.");
+            } else if (roll < 0.5) {
+                state.inventory["Mystic Dust"]++;
+                printLog("You gathered some Mystic Dust.");
+            } else {
+                printLog("You found nothing but shadows.");
+            }
+
+            updateUI();
+        }
+
+        // Init
+        updateUI();
+    </script>
+</body>
+</html>
