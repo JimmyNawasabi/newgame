@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Velvet Submission</title>
+    <title>Velvet & Gold: A Game of Submission</title>
     <style>
         :root {
-            --bg-color: #f4f0f2;
-            --primary-dark: #4A0E2E; /* Deep Velvet Plum */
-            --primary-light: #7A2048; /* Rich Red */
-            --accent-gold: #D4AF37; /* Gold */
+            --bg-light: #F4F0F2; /* Light velvet/grey */
+            --primary-dark: #4A0E2E; /* Deep Plum/Purple */
+            --primary-red: #8B0021; /* Deep Velvet Red */
+            --accent-gold: #D4AF37; /* Rich Gold */
             --text-dark: #2A2A2A;
             --text-light: #FFFFFF;
             --card-bg: #FFFFFF;
-            --shadow: 0 4px 15px rgba(74, 14, 46, 0.2);
+            --shadow: 0 6px 20px rgba(74, 14, 46, 0.15);
         }
 
         body {
             font-family: 'Georgia', serif;
-            background-color: var(--bg-color);
+            background-color: var(--bg-light);
             color: var(--text-dark);
             margin: 0;
             padding: 20px;
@@ -27,17 +27,23 @@
             align-items: center;
         }
 
-        h1, h2, h3 {
+        h1, h2, h3, h4 {
             color: var(--primary-dark);
             text-align: center;
             font-weight: normal;
+            margin-top: 0;
         }
 
-        h1 { font-size: 2.5em; border-bottom: 2px solid var(--accent-gold); padding-bottom: 10px; }
+        h1 {
+            font-size: 2.8em;
+            border-bottom: 2px solid var(--accent-gold);
+            padding-bottom: 10px;
+            color: var(--primary-red);
+        }
 
         .container {
             width: 100%;
-            max-width: 800px;
+            max-width: 900px;
             background: var(--card-bg);
             padding: 30px;
             border-radius: 12px;
@@ -50,44 +56,51 @@
 
         input[type="text"], input[type="number"], select {
             width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid var(--primary-light);
-            border-radius: 5px;
+            padding: 12px;
+            margin: 8px 0 15px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
             box-sizing: border-box;
             font-family: inherit;
+            background-color: #fafafa;
         }
 
         button {
             background-color: var(--primary-dark);
             color: var(--text-light);
             border: 1px solid var(--accent-gold);
-            padding: 12px 24px;
+            padding: 12px 20px;
             font-size: 1.1em;
-            border-radius: 5px;
+            border-radius: 4px;
             cursor: pointer;
             transition: all 0.3s ease;
             margin: 5px;
             font-family: inherit;
         }
 
-        button:hover { background-color: var(--primary-light); box-shadow: var(--shadow); }
-        button.danger { background-color: #8B0000; }
-        button.warning { background-color: #DAA520; color: #000;}
+        button:hover { background-color: var(--primary-red); box-shadow: var(--shadow); }
+        button.action-btn { background-color: var(--accent-gold); color: var(--primary-dark); font-weight: bold; }
+        button.action-btn:hover { background-color: #e5c158; }
+        button.danger { background-color: #8B0000; border-color: #ff4d4d; }
+        button.warning { background-color: #DAA520; color: #000; border-color: #000; }
         button.success { background-color: #2E8B57; }
+        button.small { padding: 5px 10px; font-size: 0.9em; }
 
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .checkbox-group { margin: 10px 0; display: flex; align-items: center; }
-        .checkbox-group input { margin-right: 10px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
+        
+        .list-section { border: 1px solid #eee; padding: 15px; border-radius: 8px; background: #faf8f9; }
+        .list-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
 
         .task-box {
-            background: #fff9fa;
-            border-left: 5px solid var(--primary-light);
-            padding: 20px;
+            background: #fffafa;
+            border-left: 6px solid var(--primary-red);
+            padding: 25px;
             margin: 20px 0;
-            font-size: 1.2em;
+            font-size: 1.25em;
             line-height: 1.6;
             font-style: italic;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
         }
 
         .status-bar {
@@ -95,381 +108,9 @@
             justify-content: space-between;
             background: var(--primary-dark);
             color: var(--accent-gold);
-            padding: 15px;
+            padding: 15px 25px;
             border-radius: 8px;
             margin-bottom: 20px;
-            font-size: 1.2em;
-        }
-
-        .timer-display {
-            font-size: 3em;
-            text-align: center;
-            color: var(--primary-dark);
-            margin: 20px 0;
+            font-size: 1.3em;
             font-weight: bold;
-        }
-
-        .card-indicator {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-weight: bold;
-            margin-left: 10px;
-        }
-        .card-red { background-color: red; color: white; }
-        .card-yellow { background-color: yellow; color: black; }
-        .card-none { opacity: 0.3; }
-
-        .inventory-section { margin-top: 20px; border-top: 1px solid #ccc; padding-top: 10px; }
-    </style>
-</head>
-<body>
-
-<div id="setup-screen" class="container">
-    <h1>Velvet Submission</h1>
-    <p style="text-align: center; font-style: italic;">A game of dominance, submission, and RACK principles.</p>
-    
-    <div class="grid-2">
-        <div>
-            <h3>Player 1</h3>
-            <input type="text" id="p1-name" placeholder="Name" value="Player 1">
-            <select id="p1-gender">
-                <option value="penis-owner">Penis Owner</option>
-                <option value="vulva-owner">Vulva Owner</option>
-            </select>
-        </div>
-        <div>
-            <h3>Player 2</h3>
-            <input type="text" id="p2-name" placeholder="Name" value="Player 2">
-            <select id="p2-gender">
-                <option value="vulva-owner">Vulva Owner</option>
-                <option value="penis-owner">Penis Owner</option>
-            </select>
-        </div>
-    </div>
-
-    <h3>Game Settings</h3>
-    <label>Total Rounds:</label>
-    <input type="number" id="total-rounds" value="20" min="5" max="100">
-
-    <h3>Allowed Categories for this Game</h3>
-    <div id="category-toggles" class="grid-2"></div>
-
-    <button onclick="startGame()" style="width: 100%; margin-top: 20px; font-size: 1.3em;">Enter the Chamber (Start Game)</button>
-</div>
-
-<div id="game-screen" class="container hidden">
-    <div class="status-bar">
-        <div id="round-display">Round 1 / 20</div>
-        <div id="score-display">P1: 0 | P2: 0</div>
-    </div>
-
-    <div style="text-align: center; margin-bottom: 20px;">
-        <h2 id="role-master" style="color: var(--primary-light);">Master: </h2>
-        <h2 id="role-sub" style="color: var(--text-dark);">Submissive: </h2>
-        <div>
-            <span id="p1-cards">P1 Cards: </span> | <span id="p2-cards">P2 Cards: </span>
-        </div>
-    </div>
-
-    <div id="task-container">
-        <h3 id="task-category">Category</h3>
-        <div id="task-desc" class="task-box">Task description goes here...</div>
-        
-        <div style="text-align: center;">
-            <button id="btn-yellow" class="warning hidden" onclick="useYellowCard()">Use Yellow Card (Swap Roles)</button>
-            <button id="btn-red" class="danger hidden" onclick="useRedCard()">Use Red Card (Pass Task)</button>
-            <button class="danger" onclick="vetoTask()">Veto Task (Remove Permanently)</button>
-        </div>
-
-        <div class="timer-display" id="timer">00:00</div>
-        
-        <div style="text-align: center;">
-            <button onclick="startTimer()">Start Timer</button>
-            <button class="success" onclick="endTask(true)">Task Succeeded</button>
-            <button class="danger" onclick="endTask(false)">Task Failed</button>
-            <button class="danger" style="background-color: #4b0082;" onclick="safeWord()">SAFE WORD (-5 Pts)</button>
-        </div>
-    </div>
-</div>
-
-<div id="finale-screen" class="container hidden">
-    <h1>The Ultimate Reward</h1>
-    <h2 id="winner-announcement">Winner is...</h2>
-    <p>The winner may now choose the roles for the Grand Prize.</p>
-    <div style="text-align: center; margin: 20px 0;">
-        <button onclick="assignFinaleRoles('winner-master')">I will be the Master</button>
-        <button onclick="assignFinaleRoles('winner-sub')">I will be the Submissive</button>
-    </div>
-    <div id="finale-task-container" class="hidden">
-        <div id="finale-desc" class="task-box"></div>
-        <button onclick="location.reload()" style="width: 100%;">End Game & Reset</button>
-    </div>
-</div>
-
-<script>
-    // --- DATABASE & THEMATIC NAMING ---
-    const CATEGORIES = [
-        "Art of the Rope", "Houdini's Plight", "Whispers & Truths", 
-        "Brazen Acts", "The Brink of Madness", "The Scale of Justice", 
-        "Velvet Touch", "Heightened Realms"
-    ];
-
-    // Sample Task Database (Expand these arrays to 50 items each)
-    let taskDB = [
-        { id: 't1', cat: "Art of the Rope", time: 300, desc: "Tightly tie the submissive's ankles with rope, then tie their wrists with rope behind their back. Take the rope and pull the ankles up into a hogtie. Put panties into the mouth of the submissive and wrap tape around their head ensuring the gag does not allow them the ability to speak or scream. Leave them to struggle for the duration." },
-        { id: 't2', cat: "Velvet Touch", time: 180, desc: "Using a feather or soft flogger, trace the inner thighs and chest of the submissive. They must remain perfectly still. If they twitch or moan loudly, restart the timer." },
-        { id: 't3', cat: "The Brink of Madness", time: 300, desc: "Master will use a vibrator or hands to bring the submissive to the very edge of climax. The submissive must beg for release, but the Master must deny them, stopping all stimulation immediately when they get close. Repeat for the duration. (Note: Penis owners must not be allowed to climax)." },
-        { id: 't4', cat: "The Scale of Justice", time: 60, desc: "The submissive is bent over an object. The Master delivers 10 firm strikes with a crop to the fleshy part of the thighs or buttocks. The submissive must count each strike out loud and say 'Thank you, Master'." },
-        { id: 't5', cat: "Heightened Realms", time: 240, desc: "Blindfold the submissive securely. Run an ice cube slowly down their spine, then their chest, while simultaneously whispering degrading but affectionate praises into their ear." }
-    ];
-
-    let finaleDB = [
-        { id: 'f1', desc: "The grand finale. The Master bounds the Submissive spread-eagle to the bed. Over the next hour, the Master has complete access to the Submissive's body, utilizing any toys from the inventory. The Master will edge the Submissive relentlessly, bringing them to the brink multiple times before finally allowing a shattering, unrestricted climax for both parties, dictating exactly how and when the Submissive is allowed to release." },
-        { id: 'f2', desc: "Sensory Overload Finale: The Submissive is blindfolded, gagged, and their wrists are bound to their ankles. The Master will use temperature play (ice and hot wax) combined with a vibrator/hands. The Submissive is completely at the Master's mercy and must endure the overwhelming sensations until the Master decides to grant them the ultimate release." }
-    ];
-
-    // --- GAME STATE ---
-    let gameState = {
-        p1: { name: '', gender: '', score: 0, cards: [] },
-        p2: { name: '', gender: '', score: 0, cards: [] },
-        maxRounds: 20,
-        currentRound: 1,
-        master: 1, // 1 or 2
-        sub: 2,
-        currentTask: null,
-        timerInterval: null,
-        timeRemaining: 0,
-        vetoedTasks: JSON.parse(localStorage.getItem('vetoedTasks') || '[]'),
-        allowedCategories: [...CATEGORIES]
-    };
-
-    // --- INITIALIZATION ---
-    function init() {
-        const catContainer = document.getElementById('category-toggles');
-        CATEGORIES.forEach(cat => {
-            let div = document.createElement('div');
-            div.className = 'checkbox-group';
-            div.innerHTML = `<input type="checkbox" id="cat-${cat}" value="${cat}" checked> <label>${cat}</label>`;
-            catContainer.appendChild(div);
-        });
-    }
-
-    function playSound(type) {
-        // In a real app, load actual audio files. Using AudioContext for a simple beep here.
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = ctx.createOscillator();
-        osc.connect(ctx.destination);
-        if (type === 'start') { osc.frequency.value = 440; osc.type = 'sine'; }
-        if (type === 'fail') { osc.frequency.value = 150; osc.type = 'sawtooth'; }
-        if (type === 'success') { osc.frequency.value = 880; osc.type = 'triangle'; }
-        osc.start();
-        setTimeout(() => osc.stop(), 300);
-    }
-
-    function startGame() {
-        gameState.p1.name = document.getElementById('p1-name').value;
-        gameState.p1.gender = document.getElementById('p1-gender').value;
-        gameState.p2.name = document.getElementById('p2-name').value;
-        gameState.p2.gender = document.getElementById('p2-gender').value;
-        gameState.maxRounds = parseInt(document.getElementById('total-rounds').value);
-
-        // Get allowed categories
-        gameState.allowedCategories = [];
-        CATEGORIES.forEach(cat => {
-            if (document.getElementById(`cat-${cat}`).checked) gameState.allowedCategories.push(cat);
-        });
-
-        // Randomize initial roles
-        if (Math.random() > 0.5) { gameState.master = 1; gameState.sub = 2; } 
-        else { gameState.master = 2; gameState.sub = 1; }
-
-        // Distribute Cards Randomly
-        let cards = ['Red', 'Yellow'];
-        cards.forEach(card => {
-            let r = Math.random();
-            if (r < 0.33) gameState.p1.cards.push(card);
-            else if (r < 0.66) gameState.p2.cards.push(card);
-        });
-
-        document.getElementById('setup-screen').classList.add('hidden');
-        document.getElementById('game-screen').classList.remove('hidden');
-        
-        startRound();
-    }
-
-    function startRound() {
-        if (gameState.currentRound > gameState.maxRounds) {
-            endGame();
-            return;
-        }
-
-        updateUI();
-        selectTask();
-    }
-
-    function updateUI() {
-        document.getElementById('round-display').innerText = `Round ${gameState.currentRound} / ${gameState.maxRounds}`;
-        document.getElementById('score-display').innerText = `${gameState.p1.name}: ${gameState.p1.score} | ${gameState.p2.name}: ${gameState.p2.score}`;
-        
-        const mName = gameState.master === 1 ? gameState.p1.name : gameState.p2.name;
-        const sName = gameState.sub === 1 ? gameState.p1.name : gameState.p2.name;
-        
-        document.getElementById('role-master').innerText = `Master: ${mName}`;
-        document.getElementById('role-sub').innerText = `Submissive: ${sName}`;
-
-        document.getElementById('p1-cards').innerHTML = `Cards: ` + gameState.p1.cards.map(c => `<span class="card-indicator card-${c.toLowerCase()}">${c}</span>`).join('');
-        document.getElementById('p2-cards').innerHTML = `Cards: ` + gameState.p2.cards.map(c => `<span class="card-indicator card-${c.toLowerCase()}">${c}</span>`).join('');
-
-        // Card button visibility
-        const subPlayer = gameState.sub === 1 ? gameState.p1 : gameState.p2;
-        const masterPlayer = gameState.master === 1 ? gameState.p1 : gameState.p2;
-
-        document.getElementById('btn-yellow').classList.toggle('hidden', !subPlayer.cards.includes('Yellow'));
-        document.getElementById('btn-red').classList.toggle('hidden', !(subPlayer.cards.includes('Red') || masterPlayer.cards.includes('Red')));
-    }
-
-    function selectTask() {
-        // Filter tasks by allowed categories and vetoed list
-        let availableTasks = taskDB.filter(t => 
-            gameState.allowedCategories.includes(t.cat) && 
-            !gameState.vetoedTasks.includes(t.id)
-        );
-
-        if (availableTasks.length === 0) {
-            document.getElementById('task-desc').innerText = "No tasks available in the selected categories. Please restart the game with more categories.";
-            return;
-        }
-
-        // Pick random task
-        let randomIndex = Math.floor(Math.random() * availableTasks.length);
-        gameState.currentTask = availableTasks[randomIndex];
-        
-        // Remove from DB for this game to prevent repetition
-        taskDB = taskDB.filter(t => t.id !== gameState.currentTask.id);
-
-        document.getElementById('task-category').innerText = gameState.currentTask.cat;
-        document.getElementById('task-desc').innerText = gameState.currentTask.desc;
-        
-        gameState.timeRemaining = gameState.currentTask.time;
-        updateTimerDisplay();
-    }
-
-    // --- TIMER LOGIC ---
-    function updateTimerDisplay() {
-        let m = Math.floor(gameState.timeRemaining / 60).toString().padStart(2, '0');
-        let s = (gameState.timeRemaining % 60).toString().padStart(2, '0');
-        document.getElementById('timer').innerText = `${m}:${s}`;
-    }
-
-    function startTimer() {
-        if (gameState.timerInterval) clearInterval(gameState.timerInterval);
-        playSound('start');
-        document.getElementById('btn-yellow').classList.add('hidden'); // Cannot swap after starting
-        document.getElementById('btn-red').classList.add('hidden'); // Cannot redraw after starting
-
-        gameState.timerInterval = setInterval(() => {
-            gameState.timeRemaining--;
-            updateTimerDisplay();
-            if (gameState.timeRemaining <= 0) {
-                clearInterval(gameState.timerInterval);
-                playSound('fail');
-            }
-        }, 1000);
-    }
-
-    // --- GAME MECHANICS ---
-    function endTask(success) {
-        clearInterval(gameState.timerInterval);
-        let subPlayer = gameState.sub === 1 ? gameState.p1 : gameState.p2;
-
-        if (success) {
-            playSound('success');
-            subPlayer.score += 1;
-            // Swap roles
-            let temp = gameState.master;
-            gameState.master = gameState.sub;
-            gameState.sub = temp;
-        } else {
-            playSound('fail');
-            subPlayer.score -= 1;
-            alert("Task Failed! A short punishment may be applied by the Master now.");
-            // Roles remain the same
-        }
-
-        gameState.currentRound++;
-        startRound();
-    }
-
-    function safeWord() {
-        clearInterval(gameState.timerInterval);
-        let subPlayer = gameState.sub === 1 ? gameState.p1 : gameState.p2;
-        subPlayer.score -= 5;
-        alert("SAFE WORD USED. Play stops immediately. Submissive loses 5 points. Roles remain the same for the next round.");
-        gameState.currentRound++;
-        startRound();
-    }
-
-    function vetoTask() {
-        if(confirm("Both players must agree to veto. This permanently removes the task from all future games. Agree?")) {
-            gameState.vetoedTasks.push(gameState.currentTask.id);
-            localStorage.setItem('vetoedTasks', JSON.stringify(gameState.vetoedTasks));
-            selectTask(); // draw a new one
-        }
-    }
-
-    function useYellowCard() {
-        let subPlayer = gameState.sub === 1 ? gameState.p1 : gameState.p2;
-        let masterPlayer = gameState.master === 1 ? gameState.p1 : gameState.p2;
-        
-        // Remove card from sub, give to master
-        subPlayer.cards = subPlayer.cards.filter(c => c !== 'Yellow');
-        masterPlayer.cards.push('Yellow');
-
-        // Swap roles
-        let temp = gameState.master;
-        gameState.master = gameState.sub;
-        gameState.sub = temp;
-        
-        updateUI();
-    }
-
-    function useRedCard() {
-        let subPlayer = gameState.sub === 1 ? gameState.p1 : gameState.p2;
-        let masterPlayer = gameState.master === 1 ? gameState.p1 : gameState.p2;
-
-        if (subPlayer.cards.includes('Red')) {
-            subPlayer.cards = subPlayer.cards.filter(c => c !== 'Red');
-            masterPlayer.cards.push('Red');
-        } else {
-            masterPlayer.cards = masterPlayer.cards.filter(c => c !== 'Red');
-            subPlayer.cards.push('Red');
-        }
-
-        updateUI();
-        selectTask(); // Redraw task
-    }
-
-    // --- FINALE LOGIC ---
-    function endGame() {
-        document.getElementById('game-screen').classList.add('hidden');
-        document.getElementById('finale-screen').classList.remove('hidden');
-
-        let winnerText = "";
-        if (gameState.p1.score > gameState.p2.score) winnerText = `${gameState.p1.name} Wins!`;
-        else if (gameState.p2.score > gameState.p1.score) winnerText = `${gameState.p2.name} Wins!`;
-        else winnerText = "It's a Tie! Both players mutually agree on the finale roles.";
-
-        document.getElementById('winner-announcement').innerText = winnerText;
-    }
-
-    function assignFinaleRoles(choice) {
-        let finaleTask = finaleDB[Math.floor(Math.random() * finaleDB.length)];
-        document.getElementById('finale-desc').innerText = finaleTask.desc;
-        document.getElementById('finale-task-container').classList.remove('hidden');
-    }
-
-    window.onload = init;
-</script>
-</body>
-</html>
+      
