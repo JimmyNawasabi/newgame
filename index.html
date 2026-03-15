@@ -1,719 +1,475 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Submission Play Framework - Expanded (Non-Graphic)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    :root{
-      --bg: #2a0a2e;
-      --bg2: #3a0e3f;
-      --accent: #b58bd8;
-      --accent2: #f0c66a;
-      --text: #f8f4ff;
-      --card: rgba(255,255,255,0.08);
-      --shadow: 0 8px 24px rgba(0,0,0,.25);
-      --green: #2ecc71;
-      --red: #e74c3c;
-      --yellow: #f1c40f;
-    }
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-      color: var(--text);
-      background: linear-gradient(135deg, #3b0a2a 0%, #2a0a2e 50%, #1f0c2a 100%);
-      background-attachment: fixed;
-    }
-    header {
-      padding: 1rem;
-      text-align: center;
-      background: linear-gradient(90deg, rgba(181,139,216,.9), rgba(240,198,106,.9));
-      color: #190c23;
-      font-weight: 700;
-      letter-spacing: .5px;
-      border-bottom: 2px solid rgba(255,255,255,.25);
-    }
-    main {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      padding: 1rem;
-    }
-    section.card {
-      background: var(--card);
-      border-radius: 12px;
-      padding: 12px;
-      box-shadow: var(--shadow);
-      min-height: 200px;
-      border: 1px solid rgba(255,255,255,.15);
-    }
-    h2 { margin: 0 0 .5rem 0; font-size: 1.1rem; }
-    .row { display:flex; gap:.5rem; align-items:center; flex-wrap: wrap; }
-    label { font-size:.9rem; color:#e8dfff; }
-    input[type="text"], input[type="number"], select, textarea {
-      padding: 6px 8px;
-      border-radius: 6px;
-      border: 1px solid rgba(255,255,255,.4);
-      background: rgba(255,255,255,.1);
-      color: #fff;
-      min-width: 180px;
-    }
-    button {
-      padding: 8px 12px;
-      border-radius: 6px;
-      border: none;
-      cursor: pointer;
-      background: linear-gradient(90deg, var(--accent), #7a4bd1);
-      color: #1a0f28;
-      font-weight: 700;
-    }
-    button.secondary { background: rgba(255,255,255,.15); color: #fff; }
-    button.danger { background: #e26a6a; }
-    button.success { background: var(--green); color: #062a12; }
-    button.warning { background: var(--yellow); }
-    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; }
-    .item {
-      display:flex; justify-content: space-between; align-items:center;
-      padding:6px; border-radius:6px; background: rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.2);
-      margin-bottom: 4px;
-    }
-    .item .name { flex:1; }
-    .mini { font-size: 12px; opacity:.8; }
-    hr.sep { border:0; height:1px; background: rgba(255,255,255,.2); margin:8px 0; }
-    .timer {
-      font-family: monospace;
-      font-size: 1.2rem;
-      padding: 8px 12px;
-      border-radius: 8px;
-      background: rgba(0,0,0,.25);
-      display:inline-block;
-    }
-    .card-title { display:flex; justify-content: space-between; align-items:center; gap:8px; }
-    .badge { padding: 4px 8px; border-radius: 999px; background: rgba(255,255,255,.15); }
-    @media (max-width: 980px){
-      main { grid-template-columns: 1fr; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Velvet Submission</title>
+    <style>
+        :root {
+            --bg-color: #f4f0f2;
+            --primary-dark: #4A0E2E; /* Deep Velvet Plum */
+            --primary-light: #7A2048; /* Rich Red */
+            --accent-gold: #D4AF37; /* Gold */
+            --text-dark: #2A2A2A;
+            --text-light: #FFFFFF;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 15px rgba(74, 14, 46, 0.2);
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1, h2, h3 {
+            color: var(--primary-dark);
+            text-align: center;
+            font-weight: normal;
+        }
+
+        h1 { font-size: 2.5em; border-bottom: 2px solid var(--accent-gold); padding-bottom: 10px; }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--accent-gold);
+            margin-bottom: 20px;
+        }
+
+        .hidden { display: none !important; }
+
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid var(--primary-light);
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        button {
+            background-color: var(--primary-dark);
+            color: var(--text-light);
+            border: 1px solid var(--accent-gold);
+            padding: 12px 24px;
+            font-size: 1.1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+            font-family: inherit;
+        }
+
+        button:hover { background-color: var(--primary-light); box-shadow: var(--shadow); }
+        button.danger { background-color: #8B0000; }
+        button.warning { background-color: #DAA520; color: #000;}
+        button.success { background-color: #2E8B57; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .checkbox-group { margin: 10px 0; display: flex; align-items: center; }
+        .checkbox-group input { margin-right: 10px; }
+
+        .task-box {
+            background: #fff9fa;
+            border-left: 5px solid var(--primary-light);
+            padding: 20px;
+            margin: 20px 0;
+            font-size: 1.2em;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            background: var(--primary-dark);
+            color: var(--accent-gold);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+
+        .timer-display {
+            font-size: 3em;
+            text-align: center;
+            color: var(--primary-dark);
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .card-indicator {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .card-red { background-color: red; color: white; }
+        .card-yellow { background-color: yellow; color: black; }
+        .card-none { opacity: 0.3; }
+
+        .inventory-section { margin-top: 20px; border-top: 1px solid #ccc; padding-top: 10px; }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>Submission Play Framework (Non-Graphic)</h1>
-    <p>Adult, consensual play helper — customizable tasks, inventories, rounds, and an ultimate prize</p>
-  </header>
 
-  <main>
-    <!-- Left: Setup -->
-    <section class="card" id="setup">
-      <div class="card-title">
-        <h2>Player Setup</h2>
-        <span class="badge" id="roundInfo">Round 0</span>
-      </div>
-      <div class="row" style="flex-wrap: wrap;">
+<div id="setup-screen" class="container">
+    <h1>Velvet Submission</h1>
+    <p style="text-align: center; font-style: italic;">A game of dominance, submission, and RACK principles.</p>
+    
+    <div class="grid-2">
         <div>
-          <label for="playerCount">Number of Players</label><br/>
-          <input type="number" id="playerCount" min="1" max="4" value="2" />
+            <h3>Player 1</h3>
+            <input type="text" id="p1-name" placeholder="Name" value="Player 1">
+            <select id="p1-gender">
+                <option value="penis-owner">Penis Owner</option>
+                <option value="vulva-owner">Vulva Owner</option>
+            </select>
         </div>
         <div>
-          <label for="masterRole">Your Role Preference</label><br/>
-          <select id="masterRole">
-            <option value="Master">Master</option>
-            <option value="Submissive">Submissive</option>
-          </select>
+            <h3>Player 2</h3>
+            <input type="text" id="p2-name" placeholder="Name" value="Player 2">
+            <select id="p2-gender">
+                <option value="vulva-owner">Vulva Owner</option>
+                <option value="penis-owner">Penis Owner</option>
+            </select>
         </div>
+    </div>
+
+    <h3>Game Settings</h3>
+    <label>Total Rounds:</label>
+    <input type="number" id="total-rounds" value="20" min="5" max="100">
+
+    <h3>Allowed Categories for this Game</h3>
+    <div id="category-toggles" class="grid-2"></div>
+
+    <button onclick="startGame()" style="width: 100%; margin-top: 20px; font-size: 1.3em;">Enter the Chamber (Start Game)</button>
+</div>
+
+<div id="game-screen" class="container hidden">
+    <div class="status-bar">
+        <div id="round-display">Round 1 / 20</div>
+        <div id="score-display">P1: 0 | P2: 0</div>
+    </div>
+
+    <div style="text-align: center; margin-bottom: 20px;">
+        <h2 id="role-master" style="color: var(--primary-light);">Master: </h2>
+        <h2 id="role-sub" style="color: var(--text-dark);">Submissive: </h2>
         <div>
-          <label for="gender">Your Gender</label><br/>
-          <select id="gender">
-            <option value="Female">Female</option>
-            <option value="Male">Male</option>
-            <option value="Non-binary">Non-binary</option>
-            <option value="Other">Other</option>
-          </select>
+            <span id="p1-cards">P1 Cards: </span> | <span id="p2-cards">P2 Cards: </span>
         </div>
-        <div>
-          <label for="roundLength">Total Rounds (Game Length)</label><br/>
-          <input type="number" id="roundLength" min="1" max="100" value="20" />
+    </div>
+
+    <div id="task-container">
+        <h3 id="task-category">Category</h3>
+        <div id="task-desc" class="task-box">Task description goes here...</div>
+        
+        <div style="text-align: center;">
+            <button id="btn-yellow" class="warning hidden" onclick="useYellowCard()">Use Yellow Card (Swap Roles)</button>
+            <button id="btn-red" class="danger hidden" onclick="useRedCard()">Use Red Card (Pass Task)</button>
+            <button class="danger" onclick="vetoTask()">Veto Task (Remove Permanently)</button>
         </div>
-        <div>
-          <button id="startGame" title="Initialize round with chosen settings">Start Game</button>
+
+        <div class="timer-display" id="timer">00:00</div>
+        
+        <div style="text-align: center;">
+            <button onclick="startTimer()">Start Timer</button>
+            <button class="success" onclick="endTask(true)">Task Succeeded</button>
+            <button class="danger" onclick="endTask(false)">Task Failed</button>
+            <button class="danger" style="background-color: #4b0082;" onclick="safeWord()">SAFE WORD (-5 Pts)</button>
         </div>
-      </div>
+    </div>
+</div>
 
-      <hr class="sep" />
+<div id="finale-screen" class="container hidden">
+    <h1>The Ultimate Reward</h1>
+    <h2 id="winner-announcement">Winner is...</h2>
+    <p>The winner may now choose the roles for the Grand Prize.</p>
+    <div style="text-align: center; margin: 20px 0;">
+        <button onclick="assignFinaleRoles('winner-master')">I will be the Master</button>
+        <button onclick="assignFinaleRoles('winner-sub')">I will be the Submissive</button>
+    </div>
+    <div id="finale-task-container" class="hidden">
+        <div id="finale-desc" class="task-box"></div>
+        <button onclick="location.reload()" style="width: 100%;">End Game & Reset</button>
+    </div>
+</div>
 
-      <div class="grid-3">
-        <!-- Inventory Management (per Submissive) -->
-        <section class="card" id="inventorySection" style="grid-column: span 3;">
-          <div class="card-title">
-            <h2>Inventory (Per Submissive)</h2>
-            <span class="badge" title="Toggle items on/off for you">Toggle Items</span>
-          </div>
-
-          <div class="row" style="flex-wrap: wrap;">
-            <div>
-              <label for="categoryFilter">Category</label><br/>
-              <select id="categoryFilter">
-                <option value="Impact">Impact</option>
-                <option value="Sensation">Sensation</option>
-                <option value="Restraints">Restraints</option>
-                <option value="Gags">Gags</option>
-                <option value="Blindfolds">Blindfolds</option>
-                <option value="Toys">Toys</option>
-              </select>
-            </div>
-            <div>
-              <button id="addItemBtn">Add Item</button>
-            </div>
-          </div>
-
-          <div id="inventoryList" class="grid-3" style="margin-top:8px;">
-            <!-- dynamic items here -->
-          </div>
-        </section>
-
-        <!-- Fetishes -->
-        <section class="card" id="fetishSection" style="grid-column: span 2;">
-          <div class="card-title">
-            <h2>Fetishes (Submissive)</h2>
-            <span class="badge" id="fetishCount">0</span>
-          </div>
-          <div class="row" style="flex-wrap: wrap;">
-            <button id="addFetishBtn">Add Fetish</button>
-          </div>
-          <div id="fetishList" class="grid-3" style="margin-top:6px;">
-            <!-- dynamic fetishes here -->
-          </div>
-        </section>
-
-        <!-- Explicitness -->
-        <section class="card" id="explicitSection" style="grid-column: span 3;">
-          <div class="card-title">
-            <h2>Explicitness (Submissive)</h2>
-            <span class="badge" id="explicitCount">0</span>
-          </div>
-          <div class="row" style="flex-wrap: wrap;">
-            <button id="addExplicitBtn">Add Explicit Item</button>
-          </div>
-          <div id="explicitList" class="grid-3" style="margin-top:6px;">
-            <!-- dynamic explicit items here -->
-          </div>
-        </section>
-      </div>
-
-      <hr class="sep" />
-
-      <div class="row" style="justify-content: space-between;">
-        <div class="mini" id="notesBox" style="max-width: 60ch;">
-          Tips: You can customize prompts and items. Tasks are non-graphic and phrased for safety.
-        </div>
-        <button id="exportBtn" class="secondary" title="Export game state">Export</button>
-        <button id="importBtn" class="secondary" title="Import game state">Import</button>
-      </div>
-
-    </section>
-
-    <!-- Right: Tasks & Rounds -->
-    <section class="card" id="gameSection" aria-label="Challenge and rounds">
-      <div class="card-title">
-        <h2>Challenge Categories</h2>
-        <span class="badge" id="activeCats">Active: 8</span>
-      </div>
-
-      <div class="row" style="flex-wrap: wrap;">
-        <button class="secondary" id="toggleAllCategories">Toggle All Categories</button>
-        <button id="newTask" title="Create a new task for current round">New Task</button>
-        <button class="warning" id="vetoBtn" title="Veto current task">Veto</button>
-        <button id="safeWordBtn" title="Submissive safe word (costs points)">Safe Word</button>
-        <button id="cardShuffle" title="Shuffle red/yellow cards">Shuffle Cards</button>
-      </div>
-
-      <hr class="sep" />
-
-      <div id="currentTask" class="card" style="margin-bottom:8px;">
-        <div class="row" style="justify-content: space-between; align-items: center;">
-          <div>
-            <strong>Current Task:</strong>
-            <span id="taskDesc" class="mini" style="margin-left:8px;">No task yet.</span>
-          </div>
-          <div>
-            <span class="timer" id="taskTimer">00:00</span>
-            <button id="startTimer" style="margin-left:8px;">Start</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="grid-3" id="taskCategories" style="margin-top:6px;">
-        <!-- category toggles generated here -->
-      </div>
-
-      <hr class="sep" />
-      <div class="grid-3" id="taskQueue" style="min-height: 120px;">
-        <!-- queued tasks -->
-      </div>
-
-      <hr class="sep" />
-      <div id="leaderboard" class="card" style="padding:8px;">
-        <strong>Leaderboard</strong>
-        <div id="leaderboardList" class="grid-3" style="margin-top:6px;">
-          <!-- dynamic top players -->
-        </div>
-      </div>
-
-      <hr class="sep" />
-      <div class="row" style="justify-content: space-between; align-items: center;">
-        <span class="mini" id="roundStatus">Round 0 of 0</span>
-        <button id="restartBtn" class="secondary" title="Restart game">Restart Game</button>
-      </div>
-    </section>
-  </main>
-
-  <!-- Hidden audio (placeholders) -->
-  <audio id="tick" preload="auto"></audio>
-  <audio id="success" preload="auto"></audio>
-  <audio id="fail" preload="auto"></audio>
-
-  <script>
-    // Data structures (versioned, localStorage-backed)
-    const storage = {
-      get(key, def) { try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch { return def; } },
-      set(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
-    };
-
-    // Global state with versioning
-    const STATE_VERSION = 1;
-    const state = {
-      version: STATE_VERSION,
-      players: 2,
-      perSub: {},           // per-sub: {1:{Inventory, Fetishes, Explicit, Score}, ...}
-      inventoryMaster: {},    // master lists per category
-      categories: [],         // category definitions
-      tasksUsed: new Set(),   // keep track of used task ids
-      currentTask: null,
-      round: 0,
-      totalRounds: 20,
-      redCardOwner: null,
-      yellowCardOwner: null,
-      vetoedTasks: new Set(),
-      scores: {},               // playerIndex -> score
-      grandPrizes: [],           // array of prize objects
-      versionNote: 'Initialized'
-    };
-
-    // Seed: default categories
-    const DEFAULT_CATEGORIES = [
-      { id:'Shibari', label:'Shibari', enabled:true },
-      { id:'Escape', label:'Escape & Challenge', enabled:true },
-      { id:'Confession', label:'Confession & Boundaries', enabled:true },
-      { id:'Dare', label:'Dares', enabled:true },
-      { id:'TeaseDenyEdge', label:'Tease, Deny & Edge', enabled:true },
-      { id:'PunishReward', label:'Punish & Reward', enabled:true },
-      { id:'SoftSexy', label:'Soft & Sexy', enabled:true },
-      { id:'Sensory', label:'Sensory', enabled:true }
+<script>
+    // --- DATABASE & THEMATIC NAMING ---
+    const CATEGORIES = [
+        "Art of the Rope", "Houdini's Plight", "Whispers & Truths", 
+        "Brazen Acts", "The Brink of Madness", "The Scale of Justice", 
+        "Velvet Touch", "Heightened Realms"
     ];
 
-    // Non-graphic task pools per category (safe, descriptive)
-    const CATEGORY_TASKS = {
-      Shibari: [
-        "Use a soft rope to secure wrists in front for up to 60 seconds, with the rope snug but not cutting circulation.",
-        "Create a simple, comfortable rope tie that restricts movement to a 15-degree arc for 30 seconds.",
-        "Lead a gentle hogtie with soft ties for 20 seconds while ensuring breathing remains unobstructed; release immediately on cue.",
-        // ... more non-graphic prompts (total >=50 across all categories)
-      ],
-      Escape: [
-        "Describe a safe word cue from a provided list and confirm mutual understanding within 60 seconds.",
-        "Communicate a boundary clearly in a brief roleplay dialogue (no explicit acts).",
-        "Complete a quick puzzle or memory task with a short timer to unlock the next cue.",
-      ],
-      Confession: [
-        "Share three non-graphic preferences for mood/setting in a whispered tone.",
-        "Express a boundary in your own words and confirm agreement with your partner.",
-      ],
-      Dare: [
-        "Recite a sultry line in a calm, controlled voice for 20 seconds.",
-        "Describe the ideal sensory scene to your partner using only non-graphic language.",
-      ],
-      TeaseDenyEdge: [
-        "Gentle whispering tease for 15 seconds, followed by a pause.",
-        "Sustain eye contact and slow, breathy talk for 20 seconds while presenting a compliment."
-      ],
-      PunishReward: [
-        "Acknowledge a misstep with a controlled breathing exercise and a 20-second reset.",
-        "Award the next task choice as a reward after a countdown of 10.",
-      ],
-      SoftSexy: [
-        "Apply lotion to partner's shoulders and back, slow and soothing for 20 seconds each side.",
-        "Light kissing along the collarbone for 5 seconds per side.",
-      ],
-      Sensory: [
-        "Let the partner identify an object by touch while blindfolded (non-graphic).",
-        "Alternate texture on forearm (cloth vs soft restraint) for 20 seconds total."
-      ]
-    };
-
-    // End-of-game Grand Prizes (non-graphic, varied, long)
-    const GRAND_PRIZES = [
-      "Ultimate trust ritual: The winner assigns roles for a private, extended scene, including a guided sensory exploration, setting a mood, and a negotiated boundary refresh. This prize includes a 20-30 minute session with emphasis on breath, voice, and closeness. The loser participates by following the lead of the winner in a respectful, pre-negotiated way.",
-      // 49+ more entries, non-graphic but evocative
-      "Bonded retreat: A long, immersive scene where the winner choreographs a sequence of tasks in a loose narrative, with care for safety and consent, culminating in a shared moment of closeness.",
-      "Roleplay evolution: The winner selects a new dynamic for an extended scene (e.g., power exchange scenario) with pre-agreed safety cues and safe word.",
-      "Sensory voyage: The winner designs a layered sensory experience (sound, touch, temperature) over a 25-40 minute window, with explicit consent checks embedded.",
-      // ... add to 50+ as needed in your production copy
+    // Sample Task Database (Expand these arrays to 50 items each)
+    let taskDB = [
+        { id: 't1', cat: "Art of the Rope", time: 300, desc: "Tightly tie the submissive's ankles with rope, then tie their wrists with rope behind their back. Take the rope and pull the ankles up into a hogtie. Put panties into the mouth of the submissive and wrap tape around their head ensuring the gag does not allow them the ability to speak or scream. Leave them to struggle for the duration." },
+        { id: 't2', cat: "Velvet Touch", time: 180, desc: "Using a feather or soft flogger, trace the inner thighs and chest of the submissive. They must remain perfectly still. If they twitch or moan loudly, restart the timer." },
+        { id: 't3', cat: "The Brink of Madness", time: 300, desc: "Master will use a vibrator or hands to bring the submissive to the very edge of climax. The submissive must beg for release, but the Master must deny them, stopping all stimulation immediately when they get close. Repeat for the duration. (Note: Penis owners must not be allowed to climax)." },
+        { id: 't4', cat: "The Scale of Justice", time: 60, desc: "The submissive is bent over an object. The Master delivers 10 firm strikes with a crop to the fleshy part of the thighs or buttocks. The submissive must count each strike out loud and say 'Thank you, Master'." },
+        { id: 't5', cat: "Heightened Realms", time: 240, desc: "Blindfold the submissive securely. Run an ice cube slowly down their spine, then their chest, while simultaneously whispering degrading but affectionate praises into their ear." }
     ];
 
-    // Utility helpers
-    const $ = (sel) => document.querySelector(sel);
-    const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+    let finaleDB = [
+        { id: 'f1', desc: "The grand finale. The Master bounds the Submissive spread-eagle to the bed. Over the next hour, the Master has complete access to the Submissive's body, utilizing any toys from the inventory. The Master will edge the Submissive relentlessly, bringing them to the brink multiple times before finally allowing a shattering, unrestricted climax for both parties, dictating exactly how and when the Submissive is allowed to release." },
+        { id: 'f2', desc: "Sensory Overload Finale: The Submissive is blindfolded, gagged, and their wrists are bound to their ankles. The Master will use temperature play (ice and hot wax) combined with a vibrator/hands. The Submissive is completely at the Master's mercy and must endure the overwhelming sensations until the Master decides to grant them the ultimate release." }
+    ];
 
-    function saveState(){
-      const payload = { version: STATE_VERSION, state: {
-        version: STATE_VERSION,
-        round: state.round,
-        totalRounds: state.totalRounds,
-        perSub: state.perSub,
-        inventoryMaster: state.inventoryMaster,
-        categories: state.categories,
-        scores: state.scores,
-        grandPrizes: state.grandPrizes,
-      }};
-      storage.set('submission_game', payload);
-    }
+    // --- GAME STATE ---
+    let gameState = {
+        p1: { name: '', gender: '', score: 0, cards: [] },
+        p2: { name: '', gender: '', score: 0, cards: [] },
+        maxRounds: 20,
+        currentRound: 1,
+        master: 1, // 1 or 2
+        sub: 2,
+        currentTask: null,
+        timerInterval: null,
+        timeRemaining: 0,
+        vetoedTasks: JSON.parse(localStorage.getItem('vetoedTasks') || '[]'),
+        allowedCategories: [...CATEGORIES]
+    };
 
-    function loadState(){
-      const data = storage.get('submission_game', null);
-      if(!data || !data.state){
-        return false;
-      }
-      // Basic sanity checks
-      if(data.version !== STATE_VERSION){
-        // migrate if needed; for now, reinit defaults
-        return false;
-      }
-      Object.assign(state, data.state);
-      state.version = STATE_VERSION;
-      return true;
-    }
-
-    // Initialize defaults
-    function initDefaults(){
-      // read start config fields
-      const pCount = Math.max(1, Math.min(4, parseInt($('#playerCount').value || '2', 10)));
-      state.players = pCount;
-      state.totalRounds = Math.max(1, parseInt($('#roundLength').value || '20', 10) );
-      state.round = 0;
-
-      // per-sub initializations
-      state.perSub = {};
-      for(let i=1;i<=state.players;i++){
-        state.perSub[i] = {
-          Inventory: { // category -> array of {name,id}
-            Impact: [],
-            Sensation: [],
-            Restraints: [],
-            Gags: [],
-            Blindfolds: [],
-            Toys: []
-          },
-          Fetishes: [],
-          Explicit: [],
-          Score: 0
-        };
-        state.scores[i] = 0;
-      }
-
-      // Master lists (basic starter items)
-      state.inventoryMaster = {
-        Impact: [
-          {name:'Basic Rope (soft)', id:'Impact:rope'},
-          {name:'Nylon Cuffs', id:'Impact:cuffs'},
-          {name:'Paddle (soft, safe)', id:'Impact:paddle'}
-        ],
-        Sensation: [
-          {name:'Feather', id:'Sensation:feather'},
-          {name:'Soft Brush', id:'Sensation:brush'}
-        ],
-        Restraints: [
-          {name:'Cable Ties (soft)', id:'Restraints:cable_ties'}
-        ],
-        Gags: [
-          {name:'Gag Cloth', id:'Gags:gag_cloth'}
-        ],
-        Blindfolds: [
-          {name:'Soft Blindfold', id:'Blindfolds:blindfold'}
-        ],
-        Toys: [
-          {name:'Vibe (not to be used for restraints)', id:'Toys:vibe'}
-        ]
-      };
-
-      // Default categories
-      state.categories = DEFAULT_CATEGORIES.map(c => ({
-        id: c.id, label: c.label, enabled: c.enabled
-      }));
-
-      // Grand prizes
-      state.grandPrizes = GRAND_PRIZES.slice(0, 50); // ensure 50+ if you add more
-    }
-
-    // UI helpers
-    function el(id){ return document.getElementById(id); }
-    function renderScoreboard(){
-      const board = document.getElementById('leaderboardList');
-      board.innerHTML = '';
-      const entries = Object.entries(state.scores)
-        .sort((a,b)=> b<a href="" class="citation-link" target="_blank" style="vertical-align: super; font-size: 0.8em; margin-left: 3px;">[1]</a>-a<a href="" class="citation-link" target="_blank" style="vertical-align: super; font-size: 0.8em; margin-left: 3px;">[1]</a>);
-      entries.forEach(([idx, score], i) => {
-        const div = document.createElement('div');
-        div.className = 'item';
-        div.style.flex = '1';
-        div.innerHTML = `<span class="name">P${idx}</span><span class="mini">Score: ${score}</span>`;
-        board.appendChild(div);
-      });
-      document.getElementById('roundStatus').textContent = `Round ${state.round} of ${state.totalRounds}`;
-    }
-
-    // Inventory rendering (per Sub 1 for simplicity; extendable to per-sub)
-    function renderInventoryUI(subIndex=1){
-      const cat = $('#categoryFilter').value;
-      const sub = state.perSub[subIndex].Inventory || {};
-      const container = $('#inventoryList');
-      container.innerHTML = '';
-
-      const masterList = state.inventoryMaster[cat] || [];
-      // show master items with toggle and selection state
-      masterList.forEach(it => {
-        const present = (sub[cat] || []).some(x => x.id === it.id);
-        const div = document.createElement('div');
-        div.className = 'item';
-        div.innerHTML = `
-          <span class="name">${it.name}</span>
-          <span class="mini">${present ? 'On' : 'Off'}</span>
-          <button data-id="${it.id}" class="toggleItem">Toggle</button>
-          <button data-id="${it.id}" class="delItem" style="margin-left:4px;">Delete</button>
-        `;
-        container.appendChild(div);
-      });
-    }
-
-    // Persist and load higher-level pieces
-    function persistAll(){
-      saveState();
-      // Also cache top-level UI state if needed (not strictly required)
-    }
-
-    // Generate a non-repeating task
-    function generateTask(excludedIds = new Set()){
-      const enabledCats = state.categories.filter(c => c.enabled).map(c => c.id);
-      if(enabledCats.length === 0) return null;
-      // choose category
-      const cat = enabledCats[Math.floor(Math.random()*enabledCats.length)];
-      const pool = CATEGORY_TASKS[cat] || [];
-      // pick a non-used task description by cycling with index derived from Date
-      // To ensure non-repetition, we derive a pseudo-index from a counter
-      const base = pool.length ? pool.length : 1;
-      let attempts = 0;
-      let text = pool<a href="" class="citation-link" target="_blank" style="vertical-align: super; font-size: 0.8em; margin-left: 3px;">[0]</a> || `Complete a consensual, non-graphic action.`;
-      // Try to pick unique by entropy
-      while(attempts < pool.length){
-        const idx = Math.floor(Math.random()*pool.length);
-        text = pool[idx];
-        const idSeed = cat+':'+idx;
-        if(!state.tasksUsed.has(idSeed) && !excludedIds.has(idSeed)){
-          state.tasksUsed.add(idSeed);
-          return { id: idSeed, category: cat, description: text, duration: 60 + Math.floor(Math.random()*120) };
-        }
-        attempts++;
-      }
-      // fallback: generate a generic task if all used
-      const generic = { id: 'gen_'+Date.now(), category: cat, description: 'Perform a consensual non-graphic action agreed with your partner.', duration: 90 };
-      state.tasksUsed.add(generic.id);
-      return generic;
-    }
-
-    // Round flow
-    function startGame(){
-      // initialize or reset numbers
-      const total = Math.max(1, parseInt($('#roundLength').value || '20', 10));
-      state.totalRounds = total;
-      state.round = 0;
-      // initialize per-sub data for all players
-      const pCount = Math.max(1, Math.min(4, parseInt($('#playerCount').value || '2', 10)));
-      state.players = pCount;
-
-      // reset per-sub arrays
-      state.perSub = {};
-      state.scores = {};
-      for(let i=1;i<=state.players;i++){
-        state.perSub[i] = {
-          Inventory: { Impact: [], Sensation: [], Restraints: [], Gags: [], Blindfolds: [], Toys: [] },
-          Fetishes: [],
-          Explicit: [],
-          Score: 0
-        };
-        state.scores[i] = 0;
-      }
-
-      // initialize master lists if missing
-      if(!state.inventoryMaster || Object.keys(state.inventoryMaster).length===0){
-        state.inventoryMaster = {
-          Impact: [
-            {name:'Basic Rope (soft)', id:'Impact:rope'},
-            {name:'Nylon Cuffs', id:'Impact:cuffs'},
-            {name:'Paddle (soft, safe)', id:'Impact:paddle'}
-          ],
-          Sensation: [
-            {name:'Feather', id:'Sensation:feather'},
-            {name:'Soft Brush', id:'Sensation:brush'}
-          ],
-          Restraints: [
-            {name:'Cable Ties (soft)', id:'Restraints:cable_ties'}
-          ],
-          Gags: [
-            {name:'Gag Cloth', id:'Gags:gag_cloth'}
-          ],
-          Blindfolds: [
-            {name:'Soft Blindfold', id:'Blindfolds:blindfold'}
-          ],
-          Toys: [
-            {name:'Vibe (not to be used for restraints)', id:'Toys:vibe'}
-          ]
-        };
-      }
-
-      // Randomize starting roles for first round
-      state.round = 1;
-      const firstMaster = Math.random() < 0.5 ? 1 : 2;
-      // For simplicity, we store role meta in a single currentRole mapping
-      state.currentRoles = { master: firstMaster, submissive: firstMaster === 1 ? 2 : 1 };
-
-      // set UI
-      $('#roundInfo').textContent = `Round ${state.round} of ${state.totalRounds}`;
-      $('#roundStatus').textContent = `Round ${state.round} of ${state.totalRounds}`;
-      renderCategoriesUI();
-      // initial task
-      state.currentTask = generateTask();
-      $('#taskDesc').textContent = state.currentTask?.description ?? 'No task yet.';
-      renderTaskQueue();
-      renderScoreboard();
-      persistAll();
-    }
-
-    function renderCategoriesUI(){
-      const cont = $('#taskCategories');
-      cont.innerHTML = '';
-      state.categories.forEach((c, idx) => {
-        const btn = document.createElement('button');
-        btn.textContent = c.enabled ? c.label : c.label + ' (off)';
-        btn.className = c.enabled ? '' : 'secondary';
-        btn.style.margin = '4px';
-        btn.addEventListener('click', ()=>{
-          c.enabled = !c.enabled;
-          btn.textContent = c.enabled ? c.label : c.label + ' (off)';
-          btn.className = c.enabled ? '' : 'secondary';
-          const active = state.categories.filter(x=>x.enabled).length;
-          document.getElementById('activeCats').textContent = `Active: ${active}`;
+    // --- INITIALIZATION ---
+    function init() {
+        const catContainer = document.getElementById('category-toggles');
+        CATEGORIES.forEach(cat => {
+            let div = document.createElement('div');
+            div.className = 'checkbox-group';
+            div.innerHTML = `<input type="checkbox" id="cat-${cat}" value="${cat}" checked> <label>${cat}</label>`;
+            catContainer.appendChild(div);
         });
-        cont.appendChild(btn);
-      });
-      document.getElementById('activeCats').textContent = `Active: ${state.categories.filter(x=>x.enabled).length}`;
     }
 
-    function renderTaskQueue(){
-      const container = $('#taskQueue');
-      container.innerHTML = '';
-      if(!state.currentTask) return;
-      const cur = document.createElement('div');
-      cur.className = 'item';
-      cur.innerHTML = `<span class="name">Current: ${state.currentTask.description} [${state.currentTask.category}]</span><span class="mini">${state.currentTask.duration}s</span>`;
-      container.appendChild(cur);
-      // previews
-      for(let i=0;i<2;i++){
-        const t = generateTask(new Set([state.currentTask?.id]));
-        const d = document.createElement('div');
-        d.className = 'item';
-        d.innerHTML = `<span class="name">Preview: ${t.description} [${t.category}]</span><span class="mini">${t.duration}s</span>`;
-        container.appendChild(d);
-      }
+    function playSound(type) {
+        // In a real app, load actual audio files. Using AudioContext for a simple beep here.
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        osc.connect(ctx.destination);
+        if (type === 'start') { osc.frequency.value = 440; osc.type = 'sine'; }
+        if (type === 'fail') { osc.frequency.value = 150; osc.type = 'sawtooth'; }
+        if (type === 'success') { osc.frequency.value = 880; osc.type = 'triangle'; }
+        osc.start();
+        setTimeout(() => osc.stop(), 300);
     }
 
-    // Timer logic
-    let timerInterval = null;
-    function startTimer(){
-      if(!state.currentTask) return;
-      if(timerInterval) clearInterval(timerInterval);
-      let remaining = state.currentTask.duration;
-      const el = $('#taskTimer');
-      function tick(){
-        const m = String(Math.floor(remaining/60)).padStart(2,'0');
-        const s = String(remaining%60).padStart(2,'0');
-        el.textContent = `${m}:${s}`;
-        if(remaining <= 0){
-          clearInterval(timerInterval);
-          timerInterval = null;
-          onTaskFail();
+    function startGame() {
+        gameState.p1.name = document.getElementById('p1-name').value;
+        gameState.p1.gender = document.getElementById('p1-gender').value;
+        gameState.p2.name = document.getElementById('p2-name').value;
+        gameState.p2.gender = document.getElementById('p2-gender').value;
+        gameState.maxRounds = parseInt(document.getElementById('total-rounds').value);
+
+        // Get allowed categories
+        gameState.allowedCategories = [];
+        CATEGORIES.forEach(cat => {
+            if (document.getElementById(`cat-${cat}`).checked) gameState.allowedCategories.push(cat);
+        });
+
+        // Randomize initial roles
+        if (Math.random() > 0.5) { gameState.master = 1; gameState.sub = 2; } 
+        else { gameState.master = 2; gameState.sub = 1; }
+
+        // Distribute Cards Randomly
+        let cards = ['Red', 'Yellow'];
+        cards.forEach(card => {
+            let r = Math.random();
+            if (r < 0.33) gameState.p1.cards.push(card);
+            else if (r < 0.66) gameState.p2.cards.push(card);
+        });
+
+        document.getElementById('setup-screen').classList.add('hidden');
+        document.getElementById('game-screen').classList.remove('hidden');
+        
+        startRound();
+    }
+
+    function startRound() {
+        if (gameState.currentRound > gameState.maxRounds) {
+            endGame();
+            return;
         }
-        remaining--;
-      }
-      tick();
-      timerInterval = setInterval(tick, 1000);
+
+        updateUI();
+        selectTask();
     }
 
-    function onTaskSuccess(){
-      // Award to current Master (we'll use the player in the master role)
-      const master = state.currentRoles?.master ?? 1;
-      state.scores[master] = (state.scores[master] ?? 0) + 1;
-      $('#taskDesc').textContent += ' (Task succeeded)';
-      $('#taskTimer').textContent = '00:00';
-      if(timerInterval) clearInterval(timerInterval);
-      setTimeout(()=> {
-        // swap roles for next task
-        swapRoles();
-        // generate next
-        state.currentTask = generateTask();
-        $('#taskDesc').textContent = state.currentTask?.description ?? 'New task';
-        renderTaskQueue();
-        renderScoreboard();
-      }, 800);
-      playSound('success');
+    function updateUI() {
+        document.getElementById('round-display').innerText = `Round ${gameState.currentRound} / ${gameState.maxRounds}`;
+        document.getElementById('score-display').innerText = `${gameState.p1.name}: ${gameState.p1.score} | ${gameState.p2.name}: ${gameState.p2.score}`;
+        
+        const mName = gameState.master === 1 ? gameState.p1.name : gameState.p2.name;
+        const sName = gameState.sub === 1 ? gameState.p1.name : gameState.p2.name;
+        
+        document.getElementById('role-master').innerText = `Master: ${mName}`;
+        document.getElementById('role-sub').innerText = `Submissive: ${sName}`;
+
+        document.getElementById('p1-cards').innerHTML = `Cards: ` + gameState.p1.cards.map(c => `<span class="card-indicator card-${c.toLowerCase()}">${c}</span>`).join('');
+        document.getElementById('p2-cards').innerHTML = `Cards: ` + gameState.p2.cards.map(c => `<span class="card-indicator card-${c.toLowerCase()}">${c}</span>`).join('');
+
+        // Card button visibility
+        const subPlayer = gameState.sub === 1 ? gameState.p1 : gameState.p2;
+        const masterPlayer = gameState.master === 1 ? gameState.p1 : gameState.p2;
+
+        document.getElementById('btn-yellow').classList.toggle('hidden', !subPlayer.cards.includes('Yellow'));
+        document.getElementById('btn-red').classList.toggle('hidden', !(subPlayer.cards.includes('Red') || masterPlayer.cards.includes('Red')));
     }
 
-    function onTaskFail(){
-      const master = state.currentRoles?.master ?? 1;
-      state.scores[master] = (state.scores[master] ?? 0) - 1;
-      $('#taskDesc').textContent += ' (Task failed)';
-      $('#taskTimer').textContent = '00:00';
-      if(timerInterval) clearInterval(timerInterval);
-      setTimeout(()=> {
-        // same roles; next task
-        state.currentTask = generateTask();
-        $('#taskDesc').textContent = state.currentTask?.description ?? 'New task';
-        renderTaskQueue();
-        renderScoreboard();
-      }, 800);
-      playSound('fail');
+    function selectTask() {
+        // Filter tasks by allowed categories and vetoed list
+        let availableTasks = taskDB.filter(t => 
+            gameState.allowedCategories.includes(t.cat) && 
+            !gameState.vetoedTasks.includes(t.id)
+        );
+
+        if (availableTasks.length === 0) {
+            document.getElementById('task-desc').innerText = "No tasks available in the selected categories. Please restart the game with more categories.";
+            return;
+        }
+
+        // Pick random task
+        let randomIndex = Math.floor(Math.random() * availableTasks.length);
+        gameState.currentTask = availableTasks[randomIndex];
+        
+        // Remove from DB for this game to prevent repetition
+        taskDB = taskDB.filter(t => t.id !== gameState.currentTask.id);
+
+        document.getElementById('task-category').innerText = gameState.currentTask.cat;
+        document.getElementById('task-desc').innerText = gameState.currentTask.desc;
+        
+        gameState.timeRemaining = gameState.currentTask.time;
+        updateTimerDisplay();
     }
 
-    function swapRoles(){
-      // swap master/submissive logically
-      const currentMaster = state.currentRoles?.master;
-      const nextMaster = currentMaster === 1 ? 2 : 1;
-      state.currentRoles = { master: nextMaster, submissive: currentMaster };
+    // --- TIMER LOGIC ---
+    function updateTimerDisplay() {
+        let m = Math.floor(gameState.timeRemaining / 60).toString().padStart(2, '0');
+        let s = (gameState.timeRemaining % 60).toString().padStart(2, '0');
+        document.getElementById('timer').innerText = `${m}:${s}`;
     }
 
-    // Cards
-    function shuffleCards(){
-      const players = Array.from({length: state.players}, (_,i)=>i+1);
-      state.redCardOwner = players[Math.floor(Math.random()*players.length)];
-      state.yellowCardOwner = players[Math.floor(Math.random()*players.length)];
-      $('#notesBox').textContent = `Cards shuffled. If Yellow is held, the holder can swap roles before starting a task. Red can veto a task. Current: R=${state.redCardOwner}, Y=${state.yellowCardOwner}`;
+    function startTimer() {
+        if (gameState.timerInterval) clearInterval(gameState.timerInterval);
+        playSound('start');
+        document.getElementById('btn-yellow').classList.add('hidden'); // Cannot swap after starting
+        document.getElementById('btn-red').classList.add('hidden'); // Cannot redraw after starting
+
+        gameState.timerInterval = setInterval(() => {
+            gameState.timeRemaining--;
+            updateTimerDisplay();
+            if (gameState.timeRemaining <= 0) {
+                clearInterval(gameState.timerInterval);
+                playSound('fail');
+            }
+        }, 1000);
     }
 
-    function vetoCurrent(){
-      if(!state.currentTask) return;
-      state.vetoedTasks.add(state.currentTask.id);
-      // new task but keep same round
-      const used = new Set(Array.from(state.vetoedTasks));
-      const t = generateTask(used);
-      state.currentTask = t;
-      $('#taskDesc').textContent = `VETOED. New Task
+    // --- GAME MECHANICS ---
+    function endTask(success) {
+        clearInterval(gameState.timerInterval);
+        let subPlayer = gameState.sub === 1 ? gameState.p1 : gameState.p2;
+
+        if (success) {
+            playSound('success');
+            subPlayer.score += 1;
+            // Swap roles
+            let temp = gameState.master;
+            gameState.master = gameState.sub;
+            gameState.sub = temp;
+        } else {
+            playSound('fail');
+            subPlayer.score -= 1;
+            alert("Task Failed! A short punishment may be applied by the Master now.");
+            // Roles remain the same
+        }
+
+        gameState.currentRound++;
+        startRound();
+    }
+
+    function safeWord() {
+        clearInterval(gameState.timerInterval);
+        let subPlayer = gameState.sub === 1 ? gameState.p1 : gameState.p2;
+        subPlayer.score -= 5;
+        alert("SAFE WORD USED. Play stops immediately. Submissive loses 5 points. Roles remain the same for the next round.");
+        gameState.currentRound++;
+        startRound();
+    }
+
+    function vetoTask() {
+        if(confirm("Both players must agree to veto. This permanently removes the task from all future games. Agree?")) {
+            gameState.vetoedTasks.push(gameState.currentTask.id);
+            localStorage.setItem('vetoedTasks', JSON.stringify(gameState.vetoedTasks));
+            selectTask(); // draw a new one
+        }
+    }
+
+    function useYellowCard() {
+        let subPlayer = gameState.sub === 1 ? gameState.p1 : gameState.p2;
+        let masterPlayer = gameState.master === 1 ? gameState.p1 : gameState.p2;
+        
+        // Remove card from sub, give to master
+        subPlayer.cards = subPlayer.cards.filter(c => c !== 'Yellow');
+        masterPlayer.cards.push('Yellow');
+
+        // Swap roles
+        let temp = gameState.master;
+        gameState.master = gameState.sub;
+        gameState.sub = temp;
+        
+        updateUI();
+    }
+
+    function useRedCard() {
+        let subPlayer = gameState.sub === 1 ? gameState.p1 : gameState.p2;
+        let masterPlayer = gameState.master === 1 ? gameState.p1 : gameState.p2;
+
+        if (subPlayer.cards.includes('Red')) {
+            subPlayer.cards = subPlayer.cards.filter(c => c !== 'Red');
+            masterPlayer.cards.push('Red');
+        } else {
+            masterPlayer.cards = masterPlayer.cards.filter(c => c !== 'Red');
+            subPlayer.cards.push('Red');
+        }
+
+        updateUI();
+        selectTask(); // Redraw task
+    }
+
+    // --- FINALE LOGIC ---
+    function endGame() {
+        document.getElementById('game-screen').classList.add('hidden');
+        document.getElementById('finale-screen').classList.remove('hidden');
+
+        let winnerText = "";
+        if (gameState.p1.score > gameState.p2.score) winnerText = `${gameState.p1.name} Wins!`;
+        else if (gameState.p2.score > gameState.p1.score) winnerText = `${gameState.p2.name} Wins!`;
+        else winnerText = "It's a Tie! Both players mutually agree on the finale roles.";
+
+        document.getElementById('winner-announcement').innerText = winnerText;
+    }
+
+    function assignFinaleRoles(choice) {
+        let finaleTask = finaleDB[Math.floor(Math.random() * finaleDB.length)];
+        document.getElementById('finale-desc').innerText = finaleTask.desc;
+        document.getElementById('finale-task-container').classList.remove('hidden');
+    }
+
+    window.onload = init;
+</script>
+</body>
+</html>
