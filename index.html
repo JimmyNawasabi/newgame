@@ -292,15 +292,44 @@ let state = {
 // Render Inventory UI
 function renderSetup() {
     const container = document.getElementById('master-list-ui');
-    container.innerHTML = "";
-    for(let cat in inventory) {
+    container.innerHTML = ""; // Clear current list
+
+    for (let cat in inventory) {
         let div = document.createElement('div');
         div.className = "inventory-section";
-        div.innerHTML = `<strong>${cat}</strong>`;
+        
+        // Header and current items
+        let itemsHtml = `<strong>${cat}</strong>`;
         inventory[cat].forEach(item => {
-            div.innerHTML += `<div class="item-row"><span>${item}</span> <button onclick="deleteItem('${cat}','${item}')" style="width:auto; padding:2px 5px;">X</button></div>`;
+            itemsHtml += `
+                <div class="item-row">
+                    <span>${item}</span> 
+                    <button onclick="deleteItem('${cat}','${item}')" style="width:auto; padding:2px 8px; background:#444; color:white;">X</button>
+                </div>`;
         });
+
+        // The "Add New" input and button for this specific category
+        itemsHtml += `
+            <div class="add-controls">
+                <input type="text" id="input-${cat.replace(/\s+/g, '')}" placeholder="New ${cat}...">
+                <button onclick="addNewItem('${cat}')">Add</button>
+            </div>`;
+            
+        div.innerHTML = itemsHtml;
         container.appendChild(div);
+    }
+}
+
+// Logic to actually push the new item into the list
+function addNewItem(cat) {
+    const inputId = `input-${cat.replace(/\s+/g, '')}`;
+    const inputEl = document.getElementById(inputId);
+    const newItem = inputEl.value.trim();
+
+    if (newItem) {
+        inventory[cat].push(newItem);
+        saveData(); // Save to local browser memory
+        renderSetup(); // Refresh the list
     }
 }
 
