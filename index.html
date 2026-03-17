@@ -3,584 +3,418 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Protocol: A Game of RACK & Submission</title>
+    <title>The Velvet Vow</title>
     <style>
         :root {
-            --velvet: #5a0b15;
-            --gold: #d4af37;
-            --charcoal: #1a1a1a;
-            --grey: #2d2d2d;
-            --text: #e0e0e0;
-            --accent: #8b0000;
+            --bg-color: #f4f0f5;
+            --text-color: #333;
+            --primary: #800020; /* Velvet Red */
+            --secondary: #4B0082; /* Deep Purple */
+            --accent: #FFD700; /* Gold */
+            --card-bg: #fff;
+            --yellow-card: #e6c200;
+            --red-card: #cc0000;
         }
-
         body {
-            background-color: var(--charcoal);
-            color: var(--text);
             font-family: 'Georgia', serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        #game-container {
-            width: 90%;
-            max-width: 800px;
-            background: var(--grey);
-            border: 2px solid var(--gold);
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-            margin: 20px;
-            padding: 30px;
-            border-radius: 8px;
-        }
-
-        h1, h2, h3 {
-            color: var(--gold);
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .setup-section, .play-section {
-            display: none;
-        }
-
-        .active { display: block; }
-
-        input, select, button {
-            background: var(--charcoal);
-            color: var(--gold);
-            border: 1px solid var(--gold);
-            padding: 10px;
-            margin: 5px;
-            font-size: 1rem;
-        }
-
-        button:hover {
-            background: var(--velvet);
-            cursor: pointer;
-        }
-
-        .inventory-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .item-card {
-            border: 1px solid var(--accent);
-            padding: 5px;
-            text-align: center;
-            background: rgba(0,0,0,0.3);
-        }
-
-        .card-display {
-            display: flex;
-            justify-content: space-around;
-            margin: 20px 0;
-        }
-
-        .card {
-            padding: 15px;
-            border: 2px solid;
-            font-weight: bold;
-            border-radius: 5px;
-        }
-
-        .yellow-card { border-color: #ffd700; color: #ffd700; }
-        .red-card { border-color: #ff0000; color: #ff0000; }
-
-        .task-box {
-            background: var(--charcoal);
-            border-left: 5px solid var(--gold);
             padding: 20px;
-            margin: 20px 0;
-            font-style: italic;
-            line-height: 1.6;
-        }
-
-        .timer {
-            font-size: 2rem;
-            text-align: center;
-            color: var(--gold);
-            margin: 10px;
-        }
-
-        .stats {
             display: flex;
-            justify-content: space-between;
-            background: var(--velvet);
-            padding: 10px;
-            border-radius: 5px;
+            justify-content: center;
         }
-
-        .hidden { display: none; }
+        #app {
+            background-color: var(--card-bg);
+            max-width: 800px;
+            width: 100%;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(75, 0, 130, 0.2);
+            border: 2px solid var(--accent);
+        }
+        h1, h2, h3 { color: var(--primary); text-align: center; }
+        .hidden { display: none !important; }
+        button {
+            background-color: var(--secondary);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        button:hover { background-color: var(--primary); }
+        .btn-danger { background-color: var(--red-card); color: white; }
+        .btn-warning { background-color: var(--yellow-card); color: black; border-color: black; }
+        .flex-row { display: flex; justify-content: space-between; flex-wrap: wrap; margin-bottom: 15px; }
+        .section { margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        input[type="text"], input[type="number"], select {
+            padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 100%; box-sizing: border-box; margin-top: 5px;
+        }
+        .item-list label { display: block; margin: 5px 0; }
+        .status-bar {
+            display: flex; justify-content: space-between; background: var(--secondary); color: var(--accent);
+            padding: 15px; border-radius: 5px; margin-bottom: 20px; font-weight: bold;
+        }
+        .task-box {
+            background: #fffafa; border: 2px dashed var(--primary); padding: 20px; text-align: center;
+            font-size: 18px; margin-bottom: 20px; line-height: 1.6;
+        }
+        .timer { font-size: 36px; color: var(--primary); text-align: center; margin: 20px 0; font-weight: bold; }
+        .cards { display: flex; justify-content: space-around; margin-bottom: 15px; }
+        .card-indicator { padding: 10px; border-radius: 5px; font-weight: bold; color: white; }
     </style>
 </head>
 <body>
 
-<div id="game-container">
-    <h1>The Protocol</h1>
-
-    <div id="setup-page" class="setup-section active">
-        <h2>Enter the Covenant</h2>
-        <div style="display:flex; justify-content: space-around;">
-            <div>
-                <input type="text" id="p1-name" placeholder="Player 1 Name">
-                <select id="p1-gender"><option value="male">Male</option><option value="female">Female</option><option value="nb">Non-Binary</option></select>
+<div id="app">
+    <!-- SETUP SCREEN -->
+    <div id="setup-screen">
+        <h1>The Velvet Vow</h1>
+        <p style="text-align:center; font-style:italic;">A game of submission, trust, and desire.</p>
+        <p style="font-size: 12px; text-align:center;">Rule: Penis owners may not climax during standard rounds. Climax is reserved only for the Ultimate Winner's Challenge.</p>
+        
+        <div class="flex-row">
+            <div style="width: 48%;">
+                <label>Player 1 Name:</label>
+                <input type="text" id="p1-name" value="Player 1">
+                <label>Gender:</label>
+                <select id="p1-gender"><option value="penis">Penis Owner</option><option value="vulva">Vulva Owner</option></select>
             </div>
-            <div>
-                <input type="text" id="p2-name" placeholder="Player 2 Name">
-                <select id="p2-gender"><option value="male">Male</option><option value="female">Female</option><option value="nb">Non-Binary</option></select>
+            <div style="width: 48%;">
+                <label>Player 2 Name:</label>
+                <input type="text" id="p2-name" value="Player 2">
+                <label>Gender:</label>
+                <select id="p2-gender"><option value="vulva">Vulva Owner</option><option value="penis">Penis Owner</option></select>
             </div>
         </div>
         
-        <div style="text-align:center; margin: 20px;">
-            <label>Rounds: </label>
-            <input type="number" id="max-rounds" value="20" style="width: 50px;">
+        <div class="section">
+            <label>Total Rounds:</label>
+            <input type="number" id="total-rounds" value="20" min="1">
         </div>
 
-        <h3>The Arsenal (Inventory)</h3>
-        <div id="inventory-lists"></div>
-        <div style="text-align: center;">
-            <input type="text" id="new-item-name" placeholder="New Item Name">
-            <select id="new-item-cat"></select>
-            <button onclick="addNewItem()">Add Item</button>
+        <div class="section">
+            <h3>Inventory Management</h3>
+            <div id="inventory-container" class="flex-row"></div>
         </div>
 
-        <h3>The Desires (Fetishes)</h3>
-        <div id="fetish-list" class="inventory-grid"></div>
-        <div style="text-align: center;">
-            <input type="text" id="new-fetish-name" placeholder="New Fetish">
-            <button onclick="addNewFetish()">Add Fetish</button>
+        <div class="section">
+            <h3>Fetishes</h3>
+            <div id="fetish-container"></div>
         </div>
 
-        <button onclick="startGame()" style="width:100%; margin-top:30px; font-weight:bold;">COMMENCE THE PROTOCOL</button>
+        <button onclick="startGame()" style="width: 100%; font-size: 20px; padding: 15px;">Enter the Velvet Room (Start)</button>
     </div>
 
-    <div id="game-page" class="play-section">
-        <div class="stats">
-            <div id="p1-stat">Name: 0</div>
-            <div id="round-display">Round 1/20</div>
-            <div id="p2-stat">Name: 0</div>
+    <!-- GAME SCREEN -->
+    <div id="game-screen" class="hidden">
+        <div class="status-bar">
+            <span id="round-display">Round: 1 / 20</span>
+            <span id="score-display">P1: 0 | P2: 0</span>
         </div>
-
-        <div class="card-display">
-            <div id="yellow-card-owner" class="card yellow-card hidden">YELLOW CARD</div>
-            <div id="red-card-owner" class="card red-card hidden">RED CARD</div>
-        </div>
-
-        <div id="role-announcement" style="text-align:center; font-size: 1.2rem; margin: 10px;"></div>
         
-        <div id="master-controls">
-            <h3>Master's Choice</h3>
-            <p>Select categories for this challenge:</p>
-            <div id="category-toggles" class="inventory-grid"></div>
-            <button onclick="generateTask()" style="width:100%;">GENERATE CHALLENGE</button>
+        <div class="cards">
+            <div id="yellow-card-display" class="card-indicator" style="background: var(--yellow-card); color: black;">Yellow Card: None</div>
+            <div id="red-card-display" class="card-indicator" style="background: var(--red-card);">Red Card: None</div>
         </div>
 
-        <div id="task-display" class="hidden">
-            <div class="task-box" id="task-text"></div>
-            <div class="timer" id="timer-display">00:00</div>
+        <h2 id="role-display" style="margin-bottom: 5px;">Master: ? | Submissive: ?</h2>
+
+        <div id="category-selection" class="section">
+            <h3>Select Categories for this Round</h3>
+            <div id="task-categories" class="flex-row"></div>
+            <button onclick="drawTask()">Draw Task</button>
+        </div>
+
+        <div id="task-display-area" class="hidden">
+            <div class="task-box" id="current-task-text">Task goes here</div>
             
-            <div style="display:flex; justify-content: center; gap: 10px;">
-                <button id="btn-start-timer" onclick="startTimer()">Start Timer</button>
-                <button id="btn-yellow" onclick="useYellowCard()">Use Yellow Card</button>
-                <button id="btn-red" onclick="useRedCard()">Use Red Card</button>
-                <button onclick="vetoTask()">Veto Task</button>
+            <div id="card-actions" style="text-align: center; margin-bottom: 15px;">
+                <button id="btn-use-yellow" class="btn-warning hidden" onclick="useYellowCard()">Use Yellow Card (Swap Roles)</button>
+                <button id="btn-use-red" class="btn-danger hidden" onclick="useRedCard()">Use Red Card (Skip Task)</button>
+                <button id="btn-veto" onclick="vetoTask()">Veto Task (Both Agree)</button>
             </div>
 
-            <div id="post-task-btns" class="hidden" style="margin-top:20px; text-align:center;">
-                <button onclick="resolveTask(true)" style="background:green; color:white;">SUCCESS</button>
-                <button onclick="resolveTask(false)" style="background:var(--accent); color:white;">FAILURE</button>
-                <button onclick="triggerSafeword()" style="background:black; color:white;">SAFEWORD</button>
+            <div id="timer-area" class="hidden">
+                <div class="timer" id="timer-display">00:00</div>
+                <div style="text-align: center;">
+                    <button onclick="taskSuccess()">Success (+1 Pt, Swap Roles)</button>
+                    <button onclick="taskFail()" class="btn-danger">Fail (-1 Pt, Punishment)</button>
+                    <button onclick="safeWord()" style="background: black; color: white;">SAFEWORD (-5 Pts)</button>
+                </div>
+            </div>
+            <div style="text-align: center;" id="start-timer-btn-area">
+                <button onclick="startTimer()">Begin Task & Start Timer</button>
             </div>
         </div>
     </div>
 
-    <div id="prize-page" class="play-section">
-        <h2 id="winner-title">Ultimate Winner</h2>
-        <div class="task-box" id="prize-text"></div>
+    <!-- END SCREEN -->
+    <div id="end-screen" class="hidden">
+        <h1>The Ultimate Climax</h1>
+        <h2 id="winner-text">Winner: </h2>
+        <div class="task-box" id="grand-prize-text"></div>
         <button onclick="location.reload()">Reset Game</button>
     </div>
 </div>
 
-<audio id="sound-success" src="https://actions.google.com/sounds/v1/foley/beeps_and_clicks_1.ogg"></audio>
-<audio id="sound-fail" src="https://actions.google.com/sounds/v1/foley/slap_impact.ogg"></audio>
-
 <script>
-/* GAME DATA & TASKS 
-   Note: I've provided representative samples of the 50 tasks per category to keep the code 
-   functional and readable. You can populate the arrays to the full 50.
-*/
+    // --- DATABASE & STATE ---
+    const defaultInventory = {
+        "Strikes": ["Flogger", "Crop", "Paddle", "Hand"],
+        "Sensation": ["Ice", "Feather tickler", "Wax candles", "Wartenberg wheel"],
+        "Bindings": ["Rope", "Handcuffs", "Silk ties", "Spreader bar"],
+        "Silence": ["Ball gag", "Ring gag", "Panties", "Tape"],
+        "Deprivation": ["Blindfold", "Hood", "Earplugs"],
+        "Playthings": ["Vibrator", "Dildo", "Butt plug"]
+    };
 
-const CATEGORIES = {
-    shibari: "The Art of the Cord",
-    escape: "The Great Escape",
-    self_bondage: "Internal Discipline",
-    dare: "The Trial",
-    tease: "The Edge of Forever",
-    punish: "Justice & Mercy",
-    soft: "The Velvet Touch",
-    sensory: "Total Deprivation"
-};
-
-const INV_CATS = {
-    impact: "The Strike",
-    sensation: "The Nerve",
-    restraints: "Bound",
-    gags: "Silence",
-    blindfolds: "The Veil",
-    toys: "Pleasure & Pain"
-};
-
-let defaultInventory = {
-    impact: ["Leather Paddle", "Rattan Cane", "Flogger", "Slapper"],
-    sensation: ["Wartenberg Wheel", "Ice Cubes", "Feather Teaser", "Wax Candle"],
-    restraints: ["Hemp Rope", "Leather Cuffs", "Spreader Bar", "Zip Ties"],
-    gags: ["Ball Gag", "Ring Gag", "Cloth Scarf", "Medical Tape"],
-    blindfolds: ["Silk Scarf", "Leather Hood", "Sleep Mask"],
-    toys: ["Vibrator", "Butt Plug", "Glass Wand", "Remote Egg"]
-};
-
-let defaultFetishes = ["Impact Play", "Breath Play", "Public Humiliation", "Pet Play", "Bondage"];
-
-// TASK DATABASE
-const tasks = {
-    shibari: [
-        { text: "Take [ROPE] and bind the submissive's wrists in a tight box-tie (Takate Kote). Ensure the tension is firm. Then, loop the remaining rope around their neck as a collar and lead them around the room for 3 minutes.", time: 300 },
-        { text: "Secure the submissive's ankles together tightly with [ROPE]. Use a second line to bind their wrists behind their back. Connect the ankles to the wrists in a strict hogtie position. They must remain balanced on their stomach without falling.", time: 480 },
-        // ... (Add 48 more)
-    ],
-    escape: [
-        { text: "Bind the submissive's wrists with [RESTRAINTS] and their mouth with [GAGS]. They are placed in a seated position. They have the duration of the timer to successfully free their hands using only body movement.", time: 300 },
-        // ... (Add 49 more)
-    ],
-    self_bondage: [
-        { text: "The submissive must use [ROPE] to tie their own ankles together with a square knot. Once secure, they must apply [GAGS] to themselves and lie down, waiting for the Master to inspect the tension.", time: 240 },
-        // ... (Add 49 more)
-    ],
-    dare: [
-        { text: "The submissive must crawl to the Master and perform 2 minutes of oral stimulation without using their hands. If they use their hands, they fail immediately.", time: 120 },
-        // ... (Add 49 more)
-    ],
-    tease: [
-        { text: "The Master will use [TOYS] on the submissive's genitals. The submissive must reach the absolute brink of climax (edging) three times. If they climax, they fail.", time: 600 },
-        // ... (Add 49 more)
-    ],
-    punish: [
-        { text: "The submissive is to receive 20 strikes from [IMPACT] on the buttocks. They must count each strike out loud. If they lose count or miss a number, the count restarts from zero.", time: 180 },
-        // ... (Add 49 more)
-    ],
-    soft: [
-        { text: "The Master uses [SENSATION] to gently trace the submissive's entire body while they are blindfolded with [BLINDFOLDS]. The submissive must describe the sensation of every touch in vivid, sexual detail.", time: 300 },
-        // ... (Add 49 more)
-    ],
-    sensory: [
-        { text: "Apply [BLINDFOLDS] and [GAGS]. The submissive is to be placed in a sensory deprivation state. The Master will apply 5 different [SENSATION] items randomly. The submissive must guess each item correctly to succeed.", time: 400 },
-        // ... (Add 49 more)
-    ]
-};
-
-const grandPrizes = [
-    "The Winner is crowned the Absolute Architect. The submissive is placed into a full-body suspension or heavy floor bondage using all available [ROPE]. The Architect will then spend the next 30 minutes alternating between [IMPACT] and [SENSATION]. Finally, the Architect chooses exactly how and when the submissive (or themselves) is allowed to climax via [TOYS] or oral. No time limit applies.",
-    "The Grand Orgasmic Denial: The submissive is bound and teased to the point of exhaustion. The winner decides if the submissive is granted a 'ruined' climax or a full release, while the winner is served entirely by the submissive's mouth until their own climax is achieved."
-    // ... (Add 48 more)
-];
-
-// GAME LOGIC
-let gameState = {
-    players: [],
-    scores: [0, 0],
-    currentRound: 1,
-    maxRounds: 20,
-    masterIdx: 0,
-    subIdx: 1,
-    yellowCard: -1,
-    redCard: -1,
-    inventory: {},
-    fetishes: [],
-    usedTasks: [],
-    vetoedTasks: [],
-    currentTask: null,
-    timer: null
-};
-
-// INITIALIZATION
-function init() {
-    loadSavedData();
-    renderSetup();
-}
-
-function loadSavedData() {
-    const savedInv = localStorage.getItem('protocol_inv');
-    const savedFet = localStorage.getItem('protocol_fetishes');
-    const savedVeto = localStorage.getItem('protocol_veto');
-
-    gameState.inventory = savedInv ? JSON.parse(savedInv) : defaultInventory;
-    gameState.fetishes = savedFet ? JSON.parse(savedFet) : defaultFetishes;
-    gameState.vetoedTasks = savedVeto ? JSON.parse(savedVeto) : [];
-}
-
-function renderSetup() {
-    const invDiv = document.getElementById('inventory-lists');
-    invDiv.innerHTML = '';
-    for (let cat in INV_CATS) {
-        let html = `<h4>${INV_CATS[cat]}</h4><div class="inventory-grid">`;
-        gameState.inventory[cat].forEach((item, index) => {
-            html += `
-                <div class="item-card">
-                    <input type="checkbox" checked id="inv-${cat}-${index}"> ${item}
-                    <button onclick="deleteItem('${cat}', ${index})" style="font-size:10px;">X</button>
-                </div>`;
-        });
-        html += `</div>`;
-        invDiv.innerHTML += html;
-
-        // Populate the 'add' dropdown
-        const opt = document.createElement('option');
-        opt.value = cat;
-        opt.innerText = INV_CATS[cat];
-        if(!document.querySelector(`#new-item-cat option[value="${cat}"]`)) {
-            document.getElementById('new-item-cat').appendChild(opt);
-        }
-    }
-
-    const fetishDiv = document.getElementById('fetish-list');
-    fetishDiv.innerHTML = '';
-    gameState.fetishes.forEach((f, i) => {
-        fetishDiv.innerHTML += `
-            <div class="item-card">
-                <input type="checkbox" checked id="fetish-${i}"> ${f}
-                <button onclick="deleteFetish(${i})" style="font-size:10px;">X</button>
-            </div>`;
-    });
-}
-
-function addNewItem() {
-    const name = document.getElementById('new-item-name').value;
-    const cat = document.getElementById('new-item-cat').value;
-    if(name) {
-        gameState.inventory[cat].push(name);
-        localStorage.setItem('protocol_inv', JSON.stringify(gameState.inventory));
-        renderSetup();
-    }
-}
-
-function deleteItem(cat, idx) {
-    gameState.inventory[cat].splice(idx, 1);
-    localStorage.setItem('protocol_inv', JSON.stringify(gameState.inventory));
-    renderSetup();
-}
-
-function addNewFetish() {
-    const name = document.getElementById('new-fetish-name').value;
-    if(name) {
-        gameState.fetishes.push(name);
-        localStorage.setItem('protocol_fetishes', JSON.stringify(gameState.fetishes));
-        renderSetup();
-    }
-}
-
-function deleteFetish(idx) {
-    gameState.fetishes.splice(idx, 1);
-    localStorage.setItem('protocol_fetishes', JSON.stringify(gameState.fetishes));
-    renderSetup();
-}
-
-// GAMEPLAY
-function startGame() {
-    gameState.players = [
-        { name: document.getElementById('p1-name').value || "Player 1", gender: document.getElementById('p1-gender').value },
-        { name: document.getElementById('p2-name').value || "Player 2", gender: document.getElementById('p2-gender').value }
+    const defaultFetishes = ["Light bondage", "Spanking", "Edging", "Wax play", "Roleplay"];
+    
+    const taskCategories = [
+        "The Art of Rope", "The Great Escape", "Bound by Self", "Devil's Dare", 
+        "The Edge of Sanity", "Retribution & Grace", "Velvet Touch", "Depths of Sensation"
     ];
-    gameState.maxRounds = parseInt(document.getElementById('max-rounds').value);
-    
-    // Randomize Cards
-    const cardRoll = Math.random();
-    if(cardRoll < 0.25) { gameState.yellowCard = 0; }
-    else if(cardRoll < 0.5) { gameState.yellowCard = 1; }
-    else if(cardRoll < 0.75) { gameState.yellowCard = 0; gameState.redCard = 1; }
-    
-    const roleRoll = Math.floor(Math.random() * 2);
-    gameState.masterIdx = roleRoll;
-    gameState.subIdx = roleRoll === 0 ? 1 : 0;
 
-    document.getElementById('setup-page').classList.remove('active');
-    document.getElementById('game-page').classList.add('active');
-    
-    updateUI();
-    renderCategoryToggles();
-}
+    // Note: You must add to this list to reach 50 per category. 
+    let tasksDB = [
+        { id: 1, cat: "The Art of Rope", time: 300, text: "Tightly tie the submissive's ankles with rope, then tie their wrists behind their back. Pull the ankles up into a hogtie. Place panties into their mouth and wrap tape around their head, ensuring the gag prevents speaking. Leave them to struggle." },
+        { id: 2, cat: "The Edge of Sanity", time: 180, text: "Blindfold the submissive and bind their hands in front of them. Use a vibrator or hand to bring them to the absolute edge of climax, then immediately stop and strike their thighs lightly with a crop to distract the sensation. Repeat this edging 3 times within the time limit." },
+        { id: 3, cat: "Velvet Touch", time: 120, text: "Blindfold the submissive. Trace a feather tickler slowly from their ankles up to their neck, alternating with light, teasing kisses. They must remain perfectly still and silent." },
+        { id: 4, cat: "Retribution & Grace", time: 60, text: "The submissive must kneel with hands on their head. Deliver 10 firm strikes to their bare bottom with a paddle. After each strike, the submissive must say 'Thank you Master'." }
+    ];
 
-function renderCategoryToggles() {
-    const container = document.getElementById('category-toggles');
-    container.innerHTML = '';
-    for(let key in CATEGORIES) {
-        container.innerHTML += `<div><input type="checkbox" checked class="cat-toggle" value="${key}"> ${CATEGORIES[key]}</div>`;
-    }
-}
+    let grandPrizesDB = [
+        "The Ultimate Release: The winner takes the role of Master. The submissive is securely bound to the bed spread-eagle. The Master will spend the next hour teasing every inch of the submissive's body using ice, wax, and soft touches. Only after a full hour of torment and begging is the submissive allowed to climax, while the Master may use the submissive's body to achieve their own climax in whatever way they see fit."
+    ];
 
-function updateUI() {
-    document.getElementById('p1-stat').innerText = `${gameState.players[0].name}: ${gameState.scores[0]}`;
-    document.getElementById('p2-stat').innerText = `${gameState.players[1].name}: ${gameState.scores[1]}`;
-    document.getElementById('round-display').innerText = `Round ${gameState.currentRound}/${gameState.maxRounds}`;
-    document.getElementById('role-announcement').innerHTML = `<strong>Master:</strong> ${gameState.players[gameState.masterIdx].name} | <strong>Submissive:</strong> ${gameState.players[gameState.subIdx].name}`;
-    
-    // Cards
-    const yCard = document.getElementById('yellow-card-owner');
-    const rCard = document.getElementById('red-card-owner');
-    
-    if(gameState.yellowCard !== -1) {
-        yCard.classList.remove('hidden');
-        yCard.innerText = `YELLOW: ${gameState.players[gameState.yellowCard].name}`;
-    } else { yCard.classList.add('hidden'); }
+    let state = {
+        p1: { name: "", gender: "", score: 0 },
+        p2: { name: "", gender: "", score: 0 },
+        rounds: 20, currentRound: 1,
+        master: 1, sub: 2,
+        yellowCard: 0, redCard: 0,
+        usedTasks: [], vetoedTasks: [],
+        timerInterval: null
+    };
 
-    if(gameState.redCard !== -1) {
-        rCard.classList.remove('hidden');
-        rCard.innerText = `RED: ${gameState.players[gameState.redCard].name}`;
-    } else { rCard.classList.add('hidden'); }
-}
-
-function generateTask() {
-    const selectedCats = Array.from(document.querySelectorAll('.cat-toggle:checked')).map(el => el.value);
-    if(selectedCats.length === 0) return alert("Select at least one category.");
-
-    const cat = selectedCats[Math.floor(Math.random() * selectedCats.length)];
-    const pool = tasks[cat].filter(t => !gameState.usedTasks.includes(t.text) && !gameState.vetoedTasks.includes(t.text));
-    
-    if(pool.length === 0) {
-        alert("Category exhausted! Resetting used tasks for this category.");
-        gameState.usedTasks = [];
-        return generateTask();
+    // --- INITIALIZATION ---
+    function init() {
+        // Load custom vetoes/items from localStorage if they exist
+        if(localStorage.getItem('vetoedTasks')) state.vetoedTasks = JSON.parse(localStorage.getItem('vetoedTasks'));
+        
+        renderInventory();
+        renderFetishes();
     }
 
-    let task = pool[Math.floor(Math.random() * pool.length)];
-    
-    // Replace place holders with random active inventory items
-    let processedText = task.text;
-    for(let key in INV_CATS) {
-        const items = gameState.inventory[key];
-        const placeholder = `[${key.toUpperCase()}]`;
-        if(processedText.includes(placeholder)) {
-            const randomItem = items[Math.floor(Math.random() * items.length)];
-            processedText = processedText.replace(placeholder, `<strong>${randomItem}</strong>`);
+    function renderInventory() {
+        const container = document.getElementById('inventory-container');
+        container.innerHTML = '';
+        for (let cat in defaultInventory) {
+            let div = document.createElement('div');
+            div.style.width = "30%";
+            div.innerHTML = `<h4>${cat}</h4>`;
+            defaultInventory[cat].forEach(item => {
+                div.innerHTML += `<label><input type="checkbox" class="inv-item" value="${item}" checked> ${item}</label>`;
+            });
+            container.appendChild(div);
         }
     }
-    // Specific check for generic [ROPE] or [RESTRAINTS]
-    processedText = processedText.replace(/\[ROPE\]/g, "<strong>Hemp Rope</strong>");
 
-    gameState.currentTask = { ...task, processedText };
-    document.getElementById('task-text').innerHTML = processedText;
-    document.getElementById('timer-display').innerText = formatTime(task.time);
-    document.getElementById('task-display').classList.remove('hidden');
-    document.getElementById('master-controls').classList.add('hidden');
-    document.getElementById('post-task-btns').classList.add('hidden');
-}
-
-function startTimer() {
-    let timeLeft = gameState.currentTask.time;
-    document.getElementById('btn-start-timer').disabled = true;
-    
-    gameState.timer = setInterval(() => {
-        timeLeft--;
-        document.getElementById('timer-display').innerText = formatTime(timeLeft);
-        if(timeLeft <= 0) {
-            clearInterval(gameState.timer);
-            document.getElementById('post-task-btns').classList.remove('hidden');
-            document.getElementById('sound-success').play();
-        }
-    }, 1000);
-}
-
-function formatTime(seconds) {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-}
-
-function resolveTask(success) {
-    clearInterval(gameState.timer);
-    if(success) {
-        gameState.scores[gameState.subIdx]++;
-        // Swap roles
-        const temp = gameState.masterIdx;
-        gameState.masterIdx = gameState.subIdx;
-        gameState.subIdx = temp;
-        document.getElementById('sound-success').play();
-    } else {
-        gameState.scores[gameState.subIdx]--;
-        document.getElementById('sound-fail').play();
-        // Punishment logic could be added here
+    function renderFetishes() {
+        const container = document.getElementById('fetish-container');
+        container.innerHTML = '';
+        defaultFetishes.forEach(f => {
+            container.innerHTML += `<label style="display:inline-block; margin-right:15px;"><input type="checkbox" class="fetish-item" value="${f}" checked> ${f}</label>`;
+        });
     }
 
-    gameState.usedTasks.push(gameState.currentTask.text);
-    gameState.currentRound++;
+    // --- GAME FLOW ---
+    function startGame() {
+        state.p1.name = document.getElementById('p1-name').value;
+        state.p1.gender = document.getElementById('p1-gender').value;
+        state.p2.name = document.getElementById('p2-name').value;
+        state.p2.gender = document.getElementById('p2-gender').value;
+        state.rounds = parseInt(document.getElementById('total-rounds').value);
 
-    if(gameState.currentRound > gameState.maxRounds) {
-        endGame();
-    } else {
-        resetRound();
-    }
-}
+        // Randomize initial roles
+        if (Math.random() > 0.5) { state.master = 1; state.sub = 2; } 
+        else { state.master = 2; state.sub = 1; }
 
-function resetRound() {
-    document.getElementById('task-display').classList.add('hidden');
-    document.getElementById('master-controls').classList.remove('hidden');
-    document.getElementById('btn-start-timer').disabled = false;
-    updateUI();
-}
+        // Randomize cards (0 = no one, 1 = P1, 2 = P2)
+        state.yellowCard = Math.floor(Math.random() * 3);
+        state.redCard = Math.floor(Math.random() * 3);
 
-function useYellowCard() {
-    if(gameState.yellowCard === gameState.subIdx) {
-        const temp = gameState.masterIdx;
-        gameState.masterIdx = gameState.subIdx;
-        gameState.subIdx = temp;
-        gameState.yellowCard = gameState.masterIdx; // Pass to other player
+        document.getElementById('setup-screen').classList.add('hidden');
+        document.getElementById('game-screen').classList.remove('hidden');
+
+        renderTaskCategories();
         updateUI();
-        alert("Roles Swapped! The Task remains the same.");
     }
-}
 
-function useRedCard() {
-    if(gameState.redCard !== -1) {
-        const owner = gameState.redCard;
-        gameState.redCard = owner === 0 ? 1 : 0; // Pass card
-        resetRound();
-        generateTask();
+    function updateUI() {
+        document.getElementById('round-display').innerText = `Round: ${state.currentRound} / ${state.rounds}`;
+        document.getElementById('score-display').innerText = `${state.p1.name}: ${state.p1.score} | ${state.p2.name}: ${state.p2.score}`;
+        
+        let mName = state.master === 1 ? state.p1.name : state.p2.name;
+        let sName = state.sub === 1 ? state.p1.name : state.p2.name;
+        document.getElementById('role-display').innerText = `Master: ${mName} | Submissive: ${sName}`;
+
+        document.getElementById('yellow-card-display').innerText = `Yellow Card: ${state.yellowCard === 1 ? state.p1.name : (state.yellowCard === 2 ? state.p2.name : 'None')}`;
+        document.getElementById('red-card-display').innerText = `Red Card: ${state.redCard === 1 ? state.p1.name : (state.redCard === 2 ? state.p2.name : 'None')}`;
+        
+        document.getElementById('task-display-area').classList.add('hidden');
+        document.getElementById('category-selection').classList.remove('hidden');
     }
-}
 
-function vetoTask() {
-    if(confirm("Permanently delete this task from the database?")) {
-        gameState.vetoedTasks.push(gameState.currentTask.text);
-        localStorage.setItem('protocol_veto', JSON.stringify(gameState.vetoedTasks));
-        resetRound();
+    function renderTaskCategories() {
+        const container = document.getElementById('task-categories');
+        container.innerHTML = '';
+        taskCategories.forEach(cat => {
+            container.innerHTML += `<label style="width: 45%;"><input type="checkbox" class="cat-select" value="${cat}" checked> ${cat}</label>`;
+        });
     }
-}
 
-function triggerSafeword() {
-    gameState.scores[gameState.subIdx] -= 5;
-    alert("Safeword triggered. Protocol paused. Points deducted.");
-    resetRound();
-}
+    let currentTaskObj = null;
 
-function endGame() {
-    document.getElementById('game-page').classList.remove('active');
-    document.getElementById('prize-page').classList.add('active');
-    
-    const winnerIdx = gameState.scores[0] > gameState.scores[1] ? 0 : 1;
-    const winnerName = gameState.players[winnerIdx].name;
-    document.getElementById('winner-title').innerText = `${winnerName} Wins the Protocol`;
-    
-    const prize = grandPrizes[Math.floor(Math.random() * grandPrizes.length)];
-    document.getElementById('prize-text').innerText = prize;
-}
+    function drawTask() {
+        let selectedCats = Array.from(document.querySelectorAll('.cat-select:checked')).map(cb => cb.value);
+        
+        // Filter out used and vetoed
+        let available = tasksDB.filter(t => 
+            selectedCats.includes(t.cat) && 
+            !state.usedTasks.includes(t.id) &&
+            !state.vetoedTasks.includes(t.id)
+        );
 
-init();
+        if (available.length === 0) {
+            alert("No tasks available for these categories! Please select more or add tasks.");
+            return;
+        }
+
+        currentTaskObj = available[Math.floor(Math.random() * available.length)];
+        
+        document.getElementById('category-selection').classList.add('hidden');
+        document.getElementById('task-display-area').classList.remove('hidden');
+        document.getElementById('current-task-text').innerText = `[${currentTaskObj.cat}] ${currentTaskObj.text}`;
+        
+        document.getElementById('timer-area').classList.add('hidden');
+        document.getElementById('start-timer-btn-area').classList.remove('hidden');
+        
+        // Card logic
+        document.getElementById('btn-use-yellow').classList.toggle('hidden', state.yellowCard !== state.sub);
+        document.getElementById('btn-use-red').classList.toggle('hidden', state.redCard === 0);
+    }
+
+    // --- CARDS & VETO ---
+    function useYellowCard() {
+        // Swap roles
+        let temp = state.master; state.master = state.sub; state.sub = temp;
+        // Pass card
+        state.yellowCard = state.yellowCard === 1 ? 2 : 1;
+        updateUI();
+        document.getElementById('category-selection').classList.add('hidden');
+        document.getElementById('task-display-area').classList.remove('hidden');
+        document.getElementById('btn-use-yellow').classList.add('hidden');
+    }
+
+    function useRedCard() {
+        // Skip task, roles stay
+        state.redCard = state.redCard === 1 ? 2 : 1;
+        updateUI();
+    }
+
+    function vetoTask() {
+        if(confirm("Do both players agree to veto this task permanently?")) {
+            state.vetoedTasks.push(currentTaskObj.id);
+            localStorage.setItem('vetoedTasks', JSON.stringify(state.vetoedTasks));
+            updateUI();
+        }
+    }
+
+    // --- TIMER & OUTCOMES ---
+    let timeRemaining = 0;
+    function startTimer() {
+        document.getElementById('start-timer-btn-area').classList.add('hidden');
+        document.getElementById('timer-area').classList.remove('hidden');
+        document.getElementById('btn-use-yellow').classList.add('hidden');
+        document.getElementById('btn-use-red').classList.add('hidden');
+        document.getElementById('btn-veto').classList.add('hidden');
+
+        timeRemaining = currentTaskObj.time;
+        updateTimerDisplay();
+        
+        state.timerInterval = setInterval(() => {
+            timeRemaining--;
+            updateTimerDisplay();
+            if(timeRemaining <= 0) {
+                clearInterval(state.timerInterval);
+                playSound(); // Placeholder for sound
+            }
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        let m = Math.floor(timeRemaining / 60).toString().padStart(2, '0');
+        let s = (timeRemaining % 60).toString().padStart(2, '0');
+        document.getElementById('timer-display').innerText = `${m}:${s}`;
+    }
+
+    function playSound() {
+        // Add actual audio file path here
+        // new Audio('bell.mp3').play();
+    }
+
+    function endRound() {
+        clearInterval(state.timerInterval);
+        state.usedTasks.push(currentTaskObj.id);
+        state.currentRound++;
+        if (state.currentRound > state.rounds) {
+            triggerEndGame();
+        } else {
+            updateUI();
+        }
+    }
+
+    function taskSuccess() {
+        if(state.sub === 1) state.p1.score += 1; else state.p2.score += 1;
+        // Swap roles
+        let temp = state.master; state.master = state.sub; state.sub = temp;
+        endRound();
+    }
+
+    function taskFail() {
+        if(state.sub === 1) state.p1.score -= 1; else state.p2.score -= 1;
+        alert("Task Failed! A short punishment will be applied by the Master immediately.");
+        // Roles stay the same
+        endRound();
+    }
+
+    function safeWord() {
+        if(state.sub === 1) state.p1.score -= 5; else state.p2.score -= 5;
+        alert("Safeword used. Task stopped immediately. Submissive loses 5 points.");
+        // Roles stay the same
+        endRound();
+    }
+
+    // --- END GAME ---
+    function triggerEndGame() {
+        document.getElementById('game-screen').classList.add('hidden');
+        document.getElementById('end-screen').classList.remove('hidden');
+        
+        let winner = state.p1.score > state.p2.score ? state.p1.name : (state.p2.score > state.p1.score ? state.p2.name : "It's a Tie!");
+        document.getElementById('winner-text').innerText = `Ultimate Winner: ${winner}`;
+
+        let prize = grandPrizesDB[Math.floor(Math.random() * grandPrizesDB.length)];
+        document.getElementById('grand-prize-text').innerText = prize;
+    }
+
+    window.onload = init;
 </script>
+
 </body>
 </html>
