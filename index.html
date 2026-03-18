@@ -1,788 +1,258 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Velvet & Chain</title>
-<style>
-  /* ============================================================
-     ROOT VARIABLES & RESET
-  ============================================================ */
-  :root {
-    --bg-primary: #1a0a2e;
-    --bg-secondary: #2d1454;
-    --bg-card: #3a1a6e;
-    --bg-card-light: #4a2480;
-    --accent-gold: #d4af37;
-    --accent-gold-light: #f0d060;
-    --accent-rose: #c8506a;
-    --accent-rose-light: #e8708a;
-    --accent-velvet: #8b3a6b;
-    --accent-silver: #c0b8d0;
-    --text-primary: #f0e6ff;
-    --text-secondary: #c8b8e8;
-    --text-muted: #9080b0;
-    --text-gold: #d4af37;
-    --border-gold: rgba(212,175,55,0.4);
-    --border-rose: rgba(200,80,106,0.4);
-    --success: #5db87a;
-    --danger: #c8506a;
-    --warning: #d4af37;
-    --shadow-gold: 0 0 20px rgba(212,175,55,0.3);
-    --shadow-rose: 0 0 20px rgba(200,80,106,0.3);
-    --shadow-purple: 0 0 30px rgba(138,58,107,0.4);
-    --font-title: 'Georgia', serif;
-    --font-body: 'Trebuchet MS', sans-serif;
-    --radius: 12px;
-    --radius-sm: 6px;
-    --transition: all 0.3s ease;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: linear-gradient(135deg, #1a0a2e 0%, #2d1454 40%, #1a0a2e 100%);
-    min-height: 100vh;
-    font-family: var(--font-body);
-    color: var(--text-primary);
-    overflow-x: hidden;
-  }
-
-  /* ============================================================
-     SCROLLBAR
-  ============================================================ */
-  ::-webkit-scrollbar { width: 8px; }
-  ::-webkit-scrollbar-track { background: var(--bg-primary); }
-  ::-webkit-scrollbar-thumb { background: var(--accent-gold); border-radius: 4px; }
-
-  /* ============================================================
-     PAGES
-  ============================================================ */
-  .page { display: none; min-height: 100vh; padding: 20px; }
-  .page.active { display: block; }
-
-  /* ============================================================
-     HEADER / LOGO
-  ============================================================ */
-  .game-header {
-    text-align: center;
-    padding: 30px 20px 20px;
-    position: relative;
-  }
-
-  .logo-title {
-    font-family: var(--font-title);
-    font-size: clamp(2.2rem, 6vw, 4rem);
-    background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-light) 50%, var(--accent-gold) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-shadow: none;
-    letter-spacing: 4px;
-    filter: drop-shadow(0 0 10px rgba(212,175,55,0.5));
-  }
-
-  .logo-subtitle {
-    font-size: 0.85rem;
-    letter-spacing: 6px;
-    color: var(--accent-silver);
-    text-transform: uppercase;
-    margin-top: 6px;
-  }
-
-  .logo-divider {
-    width: 200px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
-    margin: 12px auto;
-  }
-
-  /* ============================================================
-     CARDS
-  ============================================================ */
-  .card {
-    background: linear-gradient(135deg, rgba(58,26,110,0.9), rgba(45,20,84,0.95));
-    border: 1px solid var(--border-gold);
-    border-radius: var(--radius);
-    padding: 24px;
-    margin-bottom: 20px;
-    box-shadow: var(--shadow-purple), inset 0 1px 0 rgba(212,175,55,0.1);
-    backdrop-filter: blur(10px);
-  }
-
-  .card-title {
-    font-family: var(--font-title);
-    font-size: 1.3rem;
-    color: var(--accent-gold);
-    letter-spacing: 2px;
-    margin-bottom: 16px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--border-gold);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .card-title .icon { font-size: 1.2rem; }
-
-  /* ============================================================
-     BUTTONS
-  ============================================================ */
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 12px 24px;
-    border: none;
-    border-radius: var(--radius-sm);
-    font-family: var(--font-body);
-    font-size: 0.9rem;
-    font-weight: 600;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: var(--transition);
-    text-transform: uppercase;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .btn::before {
-    content: '';
-    position: absolute;
-    top: 0; left: -100%;
-    width: 100%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-    transition: left 0.5s;
-  }
-
-  .btn:hover::before { left: 100%; }
-
-  .btn-gold {
-    background: linear-gradient(135deg, #b8960a, var(--accent-gold), #d4af37);
-    color: #1a0a2e;
-    box-shadow: 0 4px 15px rgba(212,175,55,0.4);
-  }
-  .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212,175,55,0.6); }
-
-  .btn-rose {
-    background: linear-gradient(135deg, #a03050, var(--accent-rose), #e8708a);
-    color: #fff;
-    box-shadow: 0 4px 15px rgba(200,80,106,0.4);
-  }
-  .btn-rose:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(200,80,106,0.6); }
-
-  .btn-velvet {
-    background: linear-gradient(135deg, #6b2a5b, var(--accent-velvet), #ab5a8b);
-    color: #fff;
-    box-shadow: 0 4px 15px rgba(139,58,107,0.4);
-  }
-  .btn-velvet:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(139,58,107,0.6); }
-
-  .btn-outline {
-    background: transparent;
-    border: 1px solid var(--border-gold);
-    color: var(--accent-gold);
-  }
-  .btn-outline:hover { background: rgba(212,175,55,0.1); border-color: var(--accent-gold); }
-
-  .btn-danger {
-    background: linear-gradient(135deg, #8b2030, #c8506a);
-    color: #fff;
-    box-shadow: 0 4px 15px rgba(200,80,106,0.3);
-  }
-  .btn-danger:hover { transform: translateY(-2px); }
-
-  .btn-success {
-    background: linear-gradient(135deg, #2d7a4a, #5db87a);
-    color: #fff;
-    box-shadow: 0 4px 15px rgba(93,184,122,0.3);
-  }
-  .btn-success:hover { transform: translateY(-2px); }
-
-  .btn-sm { padding: 6px 14px; font-size: 0.78rem; }
-  .btn-lg { padding: 16px 36px; font-size: 1.05rem; letter-spacing: 2px; }
-  .btn-full { width: 100%; }
-
-  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
-
-  /* ============================================================
-     FORM ELEMENTS
-  ============================================================ */
-  .form-group { margin-bottom: 16px; }
-
-  label {
-    display: block;
-    color: var(--text-secondary);
-    font-size: 0.85rem;
-    letter-spacing: 1px;
-    margin-bottom: 6px;
-    text-transform: uppercase;
-  }
-
-  input[type="text"], input[type="number"], select, textarea {
-    width: 100%;
-    background: rgba(26,10,46,0.8);
-    border: 1px solid var(--border-gold);
-    border-radius: var(--radius-sm);
-    padding: 10px 14px;
-    color: var(--text-primary);
-    font-family: var(--font-body);
-    font-size: 0.9rem;
-    transition: var(--transition);
-    outline: none;
-  }
-
-  input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
-    border-color: var(--accent-gold);
-    box-shadow: 0 0 10px rgba(212,175,55,0.2);
-  }
-
-  select option { background: var(--bg-secondary); }
-
-  /* ============================================================
-     TOGGLE SWITCH
-  ============================================================ */
-  .toggle-wrap {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 14px;
-    background: rgba(26,10,46,0.5);
-    border: 1px solid rgba(212,175,55,0.2);
-    border-radius: var(--radius-sm);
-    margin-bottom: 8px;
-    transition: var(--transition);
-  }
-
-  .toggle-wrap:hover { border-color: var(--border-gold); background: rgba(26,10,46,0.7); }
-
-  .toggle-wrap .item-name { flex: 1; color: var(--text-primary); font-size: 0.9rem; }
-  .toggle-wrap .item-actions { display: flex; gap: 8px; align-items: center; }
-
-  .toggle {
-    position: relative;
-    width: 46px;
-    height: 24px;
-    flex-shrink: 0;
-  }
-
-  .toggle input { opacity: 0; width: 0; height: 0; }
-
-  .toggle-slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(100,80,140,0.5);
-    border-radius: 12px;
-    border: 1px solid rgba(212,175,55,0.3);
-    transition: var(--transition);
-  }
-
-  .toggle-slider::before {
-    content: '';
-    position: absolute;
-    height: 16px; width: 16px;
-    left: 4px; bottom: 3px;
-    background: var(--text-muted);
-    border-radius: 50%;
-    transition: var(--transition);
-  }
-
-  .toggle input:checked + .toggle-slider { background: linear-gradient(135deg, var(--accent-velvet), var(--accent-rose)); }
-  .toggle input:checked + .toggle-slider::before { transform: translateX(22px); background: var(--accent-gold); }
-
-  /* ============================================================
-     PLAYER SETUP
-  ============================================================ */
-  .player-card {
-    background: linear-gradient(135deg, rgba(74,36,128,0.6), rgba(45,20,84,0.8));
-    border: 1px solid var(--border-gold);
-    border-radius: var(--radius);
-    padding: 20px;
-    margin-bottom: 16px;
-    position: relative;
-    transition: var(--transition);
-  }
-
-  .player-card:hover { border-color: var(--accent-gold); box-shadow: var(--shadow-gold); }
-
-  .player-number {
-    position: absolute;
-    top: -12px; left: 20px;
-    background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-light));
-    color: #1a0a2e;
-    font-weight: 800;
-    font-size: 0.75rem;
-    padding: 3px 12px;
-    border-radius: 10px;
-    letter-spacing: 1px;
-  }
-
-  /* ============================================================
-     GRID
-  ============================================================ */
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-  @media (max-width: 600px) {
-    .grid-2, .grid-3 { grid-template-columns: 1fr; }
-  }
-
-  /* ============================================================
-     SETUP TABS
-  ============================================================ */
-  .tab-nav {
-    display: flex;
-    gap: 4px;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-    background: rgba(26,10,46,0.6);
-    padding: 6px;
-    border-radius: var(--radius);
-    border: 1px solid var(--border-gold);
-  }
-
-  .tab-btn {
-    flex: 1;
-    min-width: 120px;
-    padding: 10px 16px;
-    background: transparent;
-    border: 1px solid transparent;
-    border-radius: var(--radius-sm);
-    color: var(--text-muted);
-    cursor: pointer;
-    font-family: var(--font-body);
-    font-size: 0.82rem;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    transition: var(--transition);
-    text-align: center;
-  }
-
-  .tab-btn:hover { color: var(--text-secondary); border-color: var(--border-gold); }
-  .tab-btn.active {
-    background: linear-gradient(135deg, var(--accent-velvet), var(--accent-rose));
-    color: #fff;
-    border-color: transparent;
-    box-shadow: var(--shadow-rose);
-  }
-
-  .tab-content { display: none; }
-  .tab-content.active { display: block; }
-
-  /* ============================================================
-     ADD ITEM ROW
-  ============================================================ */
-  .add-item-row {
-    display: flex;
-    gap: 10px;
-    margin-top: 12px;
-    align-items: center;
-  }
-
-  .add-item-row input { flex: 1; margin: 0; }
-
-  /* ============================================================
-     CATEGORY BADGE
-  ============================================================ */
-  .cat-badge {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-
-  /* ============================================================
-     GAME PAGE
-  ============================================================ */
-  .game-layout {
-    display: grid;
-    grid-template-columns: 280px 1fr;
-    gap: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  @media (max-width: 900px) {
-    .game-layout { grid-template-columns: 1fr; }
-  }
-
-  .sidebar { position: sticky; top: 20px; height: fit-content; }
-
-  /* ============================================================
-     SCORE DISPLAY
-  ============================================================ */
-  .score-board {
-    background: linear-gradient(135deg, rgba(74,36,128,0.8), rgba(45,20,84,0.9));
-    border: 1px solid var(--border-gold);
-    border-radius: var(--radius);
-    padding: 20px;
-    text-align: center;
-    box-shadow: var(--shadow-gold);
-  }
-
-  .player-score {
-    padding: 14px;
-    margin-bottom: 12px;
-    border-radius: var(--radius-sm);
-    background: rgba(26,10,46,0.5);
-    border: 1px solid rgba(212,175,55,0.2);
-    transition: var(--transition);
-  }
-
-  .player-score.active-role {
-    border-color: var(--accent-rose);
-    background: rgba(200,80,106,0.1);
-    box-shadow: var(--shadow-rose);
-  }
-
-  .player-score .p-name {
-    font-family: var(--font-title);
-    font-size: 1.1rem;
-    color: var(--accent-gold);
-    margin-bottom: 4px;
-  }
-
-  .player-score .p-role {
-    font-size: 0.75rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-
-  .role-master { color: var(--accent-gold); }
-  .role-sub { color: var(--accent-rose); }
-
-  .score-num {
-    font-size: 2.2rem;
-    font-weight: 800;
-    font-family: var(--font-title);
-    color: var(--text-primary);
-  }
-
-  .score-label { font-size: 0.7rem; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; }
-
-  /* ============================================================
-     CARDS IN GAME
-  ============================================================ */
-  .special-card-wrap {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin: 12px 0;
-    flex-wrap: wrap;
-  }
-
-  .special-card {
-    padding: 10px 16px;
-    border-radius: var(--radius-sm);
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-align: center;
-    min-width: 100px;
-    transition: var(--transition);
-    cursor: default;
-  }
-
-  .special-card.yellow-card {
-    background: linear-gradient(135deg, #b8960a, #f0d060);
-    color: #1a0a2e;
-    box-shadow: 0 4px 12px rgba(212,175,55,0.4);
-  }
-
-  .special-card.red-card {
-    background: linear-gradient(135deg, #8b2030, #e8506a);
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(200,80,106,0.4);
-  }
-
-  .special-card.used {
-    opacity: 0.3;
-    filter: grayscale(80%);
-    box-shadow: none;
-  }
-
-  .card-holder { font-size: 0.7rem; margin-top: 3px; opacity: 0.8; }
-
-  /* ============================================================
-     TASK DISPLAY
-  ============================================================ */
-  .task-display {
-    background: linear-gradient(135deg, rgba(58,26,110,0.95), rgba(45,20,84,0.98));
-    border: 2px solid var(--border-gold);
-    border-radius: var(--radius);
-    padding: 28px;
-    box-shadow: var(--shadow-gold), var(--shadow-purple);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .task-display::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--accent-rose), var(--accent-gold), var(--accent-velvet));
-  }
-
-  .task-category-label {
-    display: inline-block;
-    padding: 4px 16px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 14px;
-    background: linear-gradient(135deg, var(--accent-velvet), var(--accent-rose));
-    color: #fff;
-  }
-
-  .task-text {
-    font-size: 1.0rem;
-    line-height: 1.8;
-    color: var(--text-primary);
-    background: rgba(26,10,46,0.5);
-    border-left: 3px solid var(--accent-gold);
-    padding: 16px 20px;
-    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-    margin: 14px 0;
-  }
-
-  .task-assigned {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-    margin-bottom: 16px;
-  }
-
-  .assigned-badge {
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    letter-spacing: 1px;
-  }
-
-  .assigned-sub { background: rgba(200,80,106,0.2); border: 1px solid var(--accent-rose); color: var(--accent-rose-light); }
-  .assigned-master { background: rgba(212,175,55,0.2); border: 1px solid var(--accent-gold); color: var(--accent-gold-light); }
-
-  /* ============================================================
-     TIMER
-  ============================================================ */
-  .timer-display {
-    text-align: center;
-    padding: 20px;
-    margin: 16px 0;
-    background: rgba(26,10,46,0.7);
-    border-radius: var(--radius);
-    border: 1px solid var(--border-gold);
-  }
-
-  .timer-num {
-    font-size: 4rem;
-    font-weight: 800;
-    font-family: var(--font-title);
-    color: var(--accent-gold);
-    letter-spacing: 4px;
-    line-height: 1;
-    text-shadow: 0 0 20px rgba(212,175,55,0.5);
-    transition: color 0.3s;
-  }
-
-  .timer-num.warning { color: var(--accent-rose); text-shadow: 0 0 20px rgba(200,80,106,0.7); }
-
-  .timer-label { font-size: 0.75rem; letter-spacing: 3px; color: var(--text-muted); text-transform: uppercase; margin-top: 4px; }
-
-  .timer-bar-wrap {
-    height: 6px;
-    background: rgba(100,80,140,0.3);
-    border-radius: 3px;
-    margin-top: 10px;
-    overflow: hidden;
-  }
-
-  .timer-bar {
-    height: 100%;
-    border-radius: 3px;
-    background: linear-gradient(90deg, var(--accent-rose), var(--accent-gold));
-    transition: width 1s linear, background 0.5s;
-  }
-
-  .timer-bar.low { background: linear-gradient(90deg, #8b2030, var(--accent-rose)); }
-
-  /* ============================================================
-     TASK ACTION BUTTONS
-  ============================================================ */
-  .task-actions {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 16px;
-  }
-
-  /* ============================================================
-     ROUND INDICATOR
-  ============================================================ */
-  .round-indicator {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 20px;
-    background: rgba(26,10,46,0.7);
-    border: 1px solid var(--border-gold);
-    border-radius: var(--radius);
-    margin-bottom: 16px;
-  }
-
-  .round-num {
-    font-family: var(--font-title);
-    font-size: 1.4rem;
-    color: var(--accent-gold);
-  }
-
-  .round-progress {
-    display: flex;
-    gap: 4px;
-    flex-wrap: wrap;
-    max-width: 300px;
-  }
-
-  .round-pip {
-    width: 12px; height: 12px;
-    border-radius: 50%;
-    background: rgba(100,80,140,0.4);
-    border: 1px solid rgba(212,175,55,0.2);
-    transition: var(--transition);
-  }
-
-  .round-pip.done { background: var(--accent-gold); border-color: var(--accent-gold); }
-  .round-pip.current { background: var(--accent-rose); border-color: var(--accent-rose); box-shadow: var(--shadow-rose); }
-
-  /* ============================================================
-     MODAL
-  ============================================================ */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(10,4,20,0.88);
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(6px);
-    padding: 20px;
-  }
-
-  .modal-overlay.active { display: flex; }
-
-  .modal {
-    background: linear-gradient(135deg, #2d1454, #3a1a6e);
-    border: 1px solid var(--border-gold);
-    border-radius: var(--radius);
-    padding: 32px;
-    max-width: 560px;
-    width: 100%;
-    box-shadow: var(--shadow-gold), 0 20px 60px rgba(0,0,0,0.7);
-    position: relative;
-    animation: modalIn 0.3s ease;
-    max-height: 90vh;
-    overflow-y: auto;
-  }
-
-  @keyframes modalIn {
-    from { transform: scale(0.8) translateY(-20px); opacity: 0; }
-    to { transform: scale(1) translateY(0); opacity: 1; }
-  }
-
-  .modal-title {
-    font-family: var(--font-title);
-    font-size: 1.5rem;
-    color: var(--accent-gold);
-    margin-bottom: 16px;
-    text-align: center;
-    letter-spacing: 2px;
-  }
-
-  .modal-body { color: var(--text-secondary); line-height: 1.7; margin-bottom: 20px; }
-
-  .modal-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-
-  /* ============================================================
-     PUNISHMENT BANNER
-  ============================================================ */
-  .punishment-banner {
-    background: linear-gradient(135deg, rgba(139,32,48,0.9), rgba(200,80,106,0.8));
-    border: 1px solid var(--accent-rose);
-    border-radius: var(--radius);
-    padding: 16px 20px;
-    margin: 12px 0;
-    text-align: center;
-    box-shadow: var(--shadow-rose);
-    animation: pulse-rose 2s infinite;
-  }
-
-  @keyframes pulse-rose {
-    0%, 100% { box-shadow: 0 0 10px rgba(200,80,106,0.4); }
-    50% { box-shadow: 0 0 25px rgba(200,80,106,0.8); }
-  }
-
-  .punishment-banner .p-title {
-    font-family: var(--font-title);
-    font-size: 1.1rem;
-    color: var(--accent-gold-light);
-    margin-bottom: 6px;
-    letter-spacing: 2px;
-  }
-
-  /* ============================================================
-     CATEGORY TOGGLES IN ROUND
-  ============================================================ */
-  .cat-toggle-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 8px;
-  }
-
-  .cat-toggle-item {
-    padding: 10px 14px;
-    border-radius: var(--radius-sm);
-    border: 1px solid rgba(212,175,55,0.2);
-    background: rgba(26,10,46,0.5);
-    cursor: pointer;
-    transition: var(--transition);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-  }
-
-  .cat-toggle-item.enabled {
-    border-color: var(--accent-gold);
-    background: rgba(212,175,55,0.1);
-    color: var(--text-primary);
-  }
-
-  .cat-toggle-item .cat-dot {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    background: rgba(100,80,140,0.5);
-    flex-shrink: 0;
-    transition: var(--transition);
-  }
-
-  .cat-toggle-item.enabled .cat-dot { background: var(--accent-gold); box-shadow: 0 0 6px var(--accent-gold); }
-
-  /* ============================================================
-     ENDGAME
-  ============================================================ */
-  .winner-display {
-    text-align: center;
-    padding: 40px;
-    background: linear-gradient(135deg, rgba(74,36,128,0.8), rgba(
+    <meta charset="UTF-8">
+    <title>SOVEREIGNTY: v29.0</title>
+    <style>
+        :root { 
+            --accent: #0056b3; --bg: #000; --card: #121212; 
+            --text: #FFF; --crimson: #d00000; --success: #28a745; --gold: #ffd700; --warning: #ffae00;
+        }
+        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; margin: 0; padding: 10px; display: flex; justify-content: center; }
+        .container { max-width: 1000px; width: 100%; background: var(--card); padding: 25px; border-radius: 20px; border: 2px solid var(--accent); box-shadow: 0 0 50px #000; }
+        h1 { text-align: center; text-transform: uppercase; letter-spacing: 12px; font-size: 2rem; border-bottom: 2px solid var(--accent); padding-bottom: 15px; margin: 10px 0; }
+        
+        .p-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+        .p-box { background: #080808; padding: 20px; border-radius: 10px; border: 2px solid #333; text-align: center; transition: 0.3s; }
+        .active-dom { border-color: var(--gold) !important; box-shadow: 0 0 20px rgba(255, 215, 0, 0.2); }
+        .active-sub { border-color: var(--accent) !important; box-shadow: 0 0 20px rgba(0, 86, 179, 0.2); }
+        
+        .label { font-size: 0.7rem; text-transform: uppercase; font-weight: bold; color: var(--accent); display: block; margin-bottom: 5px; letter-spacing: 2px; }
+        
+        .gen-toggle { display: flex; gap: 5px; margin-top: 10px; justify-content: center; }
+        .gen-btn { flex: 1; padding: 8px; border: 1px solid #333; background: #000; color: #555; cursor: pointer; border-radius: 4px; font-size: 0.7rem; font-weight: bold; }
+        .gen-btn.active { border-color: var(--accent); color: white; background: #001a35; }
+
+        #inventory-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 20px; }
+        .inv-section { background: #050505; padding: 10px; border: 1px solid #333; border-radius: 8px; border-left: 3px solid var(--accent); }
+
+        .theme-selector { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 15px 0; background: #0a0a0a; padding: 15px; border-radius: 10px; border: 1px solid #222; }
+        .theme-btn { padding: 10px; background: #111; border: 1px solid #333; border-radius: 4px; font-size: 0.65rem; text-align: center; cursor: pointer; color: #555; font-weight: bold; text-transform: uppercase; }
+        .theme-btn.active { border-color: var(--gold); color: var(--gold); background: #1a1500; }
+
+        #decree-text { background: #050505; padding: 30px; border-radius: 10px; border-left: 5px solid var(--gold); font-size: 1.1rem; line-height: 1.8; margin: 20px 0; color: #eee; }
+        #timer { font-size: 5rem; color: var(--crimson); font-family: monospace; text-align: center; margin: 10px 0; }
+        .btn-main { background: var(--accent); color: white; padding: 18px; width: 100%; cursor: pointer; border: none; border-radius: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; }
+        
+        #history-log { margin-top: 30px; border-top: 1px solid #222; padding-top: 15px; font-size: 0.8rem; color: #666; }
+        .history-entry { margin-bottom: 5px; display: flex; justify-content: space-between; border-bottom: 1px solid #111; padding: 3px 0; }
+
+        .safety-bar { display: flex; gap: 10px; margin-top: 15px; }
+        .card { flex: 1; padding: 15px; border-radius: 5px; cursor: pointer; text-align: center; font-weight: bold; text-transform: uppercase; font-size: 0.8rem; border: none; }
+        .card-yellow { background: var(--warning); color: #000; }
+        .card-red { background: var(--crimson); color: #fff; }
+
+        input[type="text"] { width: 100%; padding: 10px; background: #000; color: white; border: 1px solid #333; border-radius: 4px; box-sizing: border-box; }
+        .chip { background:#222; padding:2px 6px; border-radius:3px; font-size:0.65rem; display:inline-flex; align-items:center; gap:4px; margin:2px; border: 1px solid #444; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>SOVEREIGNTY</h1>
+
+    <div id="setup-screen">
+        <div class="p-grid">
+            <div class="p-box">
+                <span class="label">Player One</span>
+                <input type="text" id="p1-name" value="Master">
+                <div class="gen-toggle">
+                    <button class="gen-btn active" id="p1-m" onclick="toggleSetupGen(1,'M')">MALE</button>
+                    <button class="gen-btn" id="p1-f" onclick="toggleSetupGen(1,'F')">FEMALE</button>
+                </div>
+            </div>
+            <div class="p-box">
+                <span class="label">Player Two</span>
+                <input type="text" id="p2-name" value="Slave">
+                <div class="gen-toggle">
+                    <button class="gen-btn" id="p2-m" onclick="toggleSetupGen(2,'M')">MALE</button>
+                    <button class="gen-btn active" id="p2-f" onclick="toggleSetupGen(2,'F')">FEMALE</button>
+                </div>
+            </div>
+        </div>
+        <div id="inventory-list"></div>
+        <button class="btn-main" style="margin-top:20px;" onclick="startSession()">LOCK PROTOCOLS</button>
+    </div>
+
+    <div id="play-screen" style="display:none;">
+        <div id="phase-label" style="text-align:center; color:var(--accent); letter-spacing: 3px; margin-bottom: 15px; font-weight:bold;">PHASE 1</div>
+        <div class="p-grid">
+            <div id="dom-card" class="p-box active-dom">
+                <span class="label" style="color:var(--gold)">DOMINANT</span>
+                <div id="dom-display" style="font-size: 1.4rem; font-weight: bold;"></div>
+                <div id="dom-score" style="color: #666; font-size: 0.8rem; margin-top:5px;">Points: 0</div>
+            </div>
+            <div id="sub-card" class="p-box active-sub">
+                <span class="label" style="color:var(--accent)">SUBMISSIVE</span>
+                <div id="sub-display" style="font-size: 1.4rem; font-weight: bold;"></div>
+                <div id="sub-score" style="color: #666; font-size: 0.8rem; margin-top:5px;">Points: 0</div>
+            </div>
+        </div>
+        <div id="control-area">
+            <div class="theme-selector" id="theme-selector"></div>
+            <button class="btn-main" onclick="generateDecree()">GENERATE DECREE</button>
+        </div>
+        <div id="decree-area" style="display:none;">
+            <div id="timer">00:00</div>
+            <button class="btn-main" id="commence-btn" style="background:var(--gold); color:black;" onclick="runTimer()">COMMENCE PHASE</button>
+            <div id="decree-text"></div>
+            <div class="safety-bar">
+                <button class="card card-yellow" onclick="alert('YELLOW: Reduce intensity.')">YELLOW</button>
+                <button class="card card-red" onclick="location.reload()">RED (EXIT)</button>
+            </div>
+            <div id="resolution-buttons" style="display:none; gap:10px; margin-top:15px;">
+                <button class="btn-main" style="background:#1a1a1a; flex:1;" onclick="resolve(false)">FAILURE (-1 PT)</button>
+                <button class="btn-main" style="background:var(--success); flex:1;" onclick="resolve(true)">SUCCESS (+1 PT & SWAP)</button>
+            </div>
+        </div>
+        <div id="history-log"><strong>HISTORY LOG:</strong><div id="history-inner"></div></div>
+    </div>
+</div>
+
+<script>
+const CATS = ["Restraints", "Impact", "Gags", "Shadow", "Sensory", "Ache", "Stillness", "Quietude"];
+const THEMES = ["Self Bondage", "Truth", "Dare", "Soft and Sexy", "Escape", "Shibari", "Physical Challenge", "Tease and Denial"];
+
+let session = {
+    round: 1,
+    dom: { name: "", gender: "M", score: 0 },
+    sub: { name: "", gender: "F", score: 0 },
+    inv: JSON.parse(localStorage.getItem('sov_v29_inv')) || {
+        "Restraints":["Rope"], "Impact":["Paddle"], "Gags":["Ball Gag"], 
+        "Shadow":["Blindfold", "Hood"], "Sensory":["Wax"], "Ache":["Clamps"], 
+        "Stillness":["Collar"], "Quietude":["Muzzle"]
+    },
+    activeThemes: [...THEMES],
+    timer: null, history: []
+};
+
+// Force Shadow
+CATS.forEach(c => { if(!session.inv[c]) session.inv[c] = ["Standard " + c]; });
+
+function toggleSetupGen(p, g) {
+    if(p === 1) session.dom.gender = g; else session.sub.gender = g;
+    const btns = event.target.parentNode.querySelectorAll('.gen-btn');
+    btns.forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+}
+
+function renderInv() {
+    document.getElementById('inventory-list').innerHTML = CATS.map(c => `
+        <div class="inv-section"><span class="label">${c}</span>
+        <div id="items-${c}">${session.inv[c].map((it, i) => `<span class="chip">${it} <span onclick="removeItem('${c}',${i})" style="color:red;cursor:pointer">×</span></span>`).join('')}</div>
+        <input type="text" placeholder="+" onkeydown="if(event.key==='Enter'){addItem('${c}',this.value);this.value=''}"></div>
+    `).join('');
+}
+function addItem(c,v){ if(v){session.inv[c].push(v); save(); renderInv();}}
+function removeItem(c,i){ session.inv[c].splice(i,1); save(); renderInv();}
+function save(){ localStorage.setItem('sov_v29_inv', JSON.stringify(session.inv)); }
+
+function startSession() {
+    session.dom.name = document.getElementById('p1-name').value;
+    session.sub.name = document.getElementById('p2-name').value;
+    document.getElementById('setup-screen').style.display = 'none';
+    document.getElementById('play-screen').style.display = 'block';
+    renderThemes();
+    updateUI();
+}
+
+function renderThemes() {
+    document.getElementById('theme-selector').innerHTML = THEMES.map(t => `
+        <div class="theme-btn ${session.activeThemes.includes(t)?'active':''}" onclick="toggleTheme('${t}')">${t}</div>
+    `).join('');
+}
+function toggleTheme(t){
+    if(session.activeThemes.includes(t)) session.activeThemes = session.activeThemes.filter(x=>x!==t);
+    else session.activeThemes.push(t);
+    renderThemes();
+}
+
+function updateUI() {
+    document.getElementById('phase-label').innerText = `PHASE ${session.round}`;
+    document.getElementById('dom-display').innerText = `${session.dom.name} (${session.dom.gender})`;
+    document.getElementById('dom-score').innerText = `Points: ${session.dom.score}`;
+    document.getElementById('sub-display').innerText = `${session.sub.name} (${session.sub.gender})`;
+    document.getElementById('sub-score').innerText = `Points: ${session.sub.score}`;
+    
+    let histHtml = session.history.map(h => `<div class="history-entry"><span>Phase ${h.r}: ${h.d} > ${h.s}</span><span>[${h.res}]</span></div>`).join('');
+    document.getElementById('history-inner').innerHTML = histHtml;
+}
+
+function generateDecree() {
+    const theme = session.activeThemes[Math.floor(Math.random()*session.activeThemes.length)];
+    const r = (arr) => arr[Math.floor(Math.random()*arr.length)];
+    const tool = (c) => r(session.inv[c]);
+    
+    const d = session.dom.name; const s = session.sub.name;
+    const isM = session.sub.gender === 'M';
+    const subObj = isM ? 'him' : 'her';
+    const subPoss = isM ? 'his' : 'her';
+    const subSelf = isM ? 'himself' : 'herself';
+
+    let text = ""; let time = 600;
+
+    switch(theme) {
+        case "Self Bondage":
+            text = `${s}, apply the **${tool('Shadow')}** now. Bind ${subPoss} ankles with **${tool('Restraints')}**. Reach back and secure ${subPoss} wrists, cinching ${subObj} into a strict hogtie. ${d} will inspect the tension and ensure ${s} cannot move.`;
+            time = 900; break;
+        case "Tease and Denial":
+            text = `${s} is blindfolded with the **${tool('Shadow')}**. ${d} will use **${tool('Ache')}** and **${tool('Sensory')}**. If ${s} moans, ${d} strikes ${subObj} with the **${tool('Impact')}**. ${s} must thank ${d} for every strike.`;
+            time = 1200; break;
+        case "Truth":
+            text = `${s} is to be blindfolded with the **${tool('Shadow')}** and forced to kneel. ${d} will ask 5 questions. For every hesitation, ${d} will apply the **${tool('Ache')}** to ${subPoss} most sensitive areas. ${s} must remain perfectly still.`;
+            time = 600; break;
+        case "Physical Challenge":
+            text = `${s}, wearing the **${tool('Shadow')}**, must maintain a deep squat. ${d} will deliver random strikes with the **${tool('Impact')}** to ${subPoss} buttocks. If ${s} flinches or breaks form, the timer resets.`;
+            time = 720; break;
+        case "Escape":
+            text = `${s} is to be blindfolded with the **${tool('Shadow')}**, gagged with the **${tool('Gags')}**, and bound with **${tool('Restraints')}**. ${s} must attempt to free ${subSelf} before the timer ends. If the blindfold is displaced, ${s} fails.`;
+            time = 1200; break;
+        default:
+            text = `${s}, ${d} demands total silence. Apply the **${tool('Shadow')}**. Use the **${tool('Restraints')}** on ${subObj}. Wait for the **${tool('Impact')}**.`;
+            time = 600;
+    }
+
+    document.getElementById('decree-text').innerHTML = `<strong>PROTOCOL: ${theme.toUpperCase()}</strong><br><br>${text}`;
+    document.getElementById('timer').innerText = formatT(time);
+    session.currentTime = time;
+    document.getElementById('control-area').style.display = 'none';
+    document.getElementById('decree-area').style.display = 'block';
+    document.getElementById('resolution-buttons').style.display = 'none';
+    document.getElementById('commence-btn').style.display = 'block';
+}
+
+function runTimer() {
+    document.getElementById('commence-btn').style.display = 'none';
+    document.getElementById('resolution-buttons').style.display = 'flex';
+    let t = session.currentTime;
+    clearInterval(session.timer);
+    session.timer = setInterval(() => {
+        t--; document.getElementById('timer').innerText = formatT(t);
+        if(t <= 0) clearInterval(session.timer);
+    }, 1000);
+}
+
+function resolve(success) {
+    clearInterval(session.timer);
+    session.history.unshift({ r: session.round, d: session.dom.name, s: session.sub.name, res: success ? "SUCCESS" : "FAIL" });
+    
+    if(success) {
+        session.sub.score += 1;
+        let temp = {...session.dom};
+        session.dom = {...session.sub};
+        session.sub = temp;
+    } else {
+        session.sub.score -= 1;
+    }
+    
+    session.round++;
+    document.getElementById('control-area').style.display = 'block';
+    document.getElementById('decree-area').style.display = 'none';
+    updateUI();
+}
+
+function formatT(s) { return `${Math.floor(s/60)}:${(s%60).toString().padStart(2,'0')}`; }
+renderInv();
+</script>
+</body>
+</html>
